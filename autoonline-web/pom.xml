@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.solera.global.qa</groupId>
+        <artifactId>autoonline</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.solera.global.qa.autoonline</groupId>
+    <artifactId>autoonline-web</artifactId>
+    <packaging>jar</packaging>
+    <name>Global:QA:AutoOnline:Web</name>
+
+    <properties>
+        <testCategory></testCategory>
+        <suiteXml>src/test/resources/testng.xml</suiteXml>
+        <app.config>null</app.config>
+    </properties>
+
+    <dependencies>
+        <!-- ReportPortal dependency should go first-->
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-testng</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-log4j</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+        <!-- taf project dependencies -->
+        <dependency>
+            <groupId>com.solera.global.qa.taf</groupId>
+            <artifactId>taf-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.solera.global.qa.taf</groupId>
+            <artifactId>taf-web</artifactId>
+        </dependency>
+        <!--        Add third party dependencies here-->
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+
+        <!-- xUnit testing -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <profiles>
+        <!--Web Test Profiles-->
+        <profile>
+            <id>autoonline:web:regression</id>
+            <properties>
+                <suiteXml>src/test/resources/suites/regressionSuite.xml</suiteXml>
+                <!--Parallel run can be: classes, methods, none...-->
+                <parallelRun>none</parallelRun>
+            </properties>
+        </profile>
+        <profile>
+            <id>autoonline:web:smoke</id>
+            <properties>
+                <suiteXml>src/test/resources/suites/smokeSuite.xml</suiteXml>
+                <parallelRun>none</parallelRun>
+            </properties>
+        </profile>
+        <profile>
+            <id>autoonline:web:debug</id>
+            <properties>
+                <suiteXml>src/test/resources/suites/transferSuite.xml</suiteXml>
+                <parallelRun>none</parallelRun>
+            </properties>
+        </profile>
+        <profile>
+            <id>autoonline:web:debugReports</id>
+            <properties>
+                <suiteXml>src/test/resources/suites/ReportsSuite.xml</suiteXml>
+                <parallelRun>none</parallelRun>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>getClasspathFilenames</id>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <parallel>${parallelRun}</parallel>
+                    <useUnlimitedThreads>false</useUnlimitedThreads>
+                    <threadCount>1</threadCount>
+                    <perCoreThreadCount>false</perCoreThreadCount>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXml}</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                    <linkXRef>false</linkXRef>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>Ernesto Zarate</name>
+            <email>ernesto.zaraterodriguez@Solera.com</email>
+        </developer>
+        <developer>
+            <name>Enrique Hernandez</name>
+            <email>enrique.hernandez@solera.com</email>
+        </developer>
+        <developer>
+            <name>Viridiana Cruz</name>
+            <email>viridiana.cruz@solera.com</email>
+        </developer>
+    </developers>
+
+</project>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.solera.global.qa</groupId>
+    <artifactId>autoonline</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <name>Global:QA:autoonline</name>
+
+    <organization>
+        <name>Solera Inc</name>
+        <url>http://solera.com</url>
+    </organization>
+
+    <modules>
+        <module>autoonline-web</module>
+        <module>autoonline-rest</module>
+    </modules>
+
+    <properties>
+        <!-- Version xx.xx.x.x  -->
+        <revision>25.09.1.1</revision>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <envConfig></envConfig>
+        <!-- Project related -->
+        <sg.qa.taf.version>2.0.0</sg.qa.taf.version>
+        <!-- Profile -->
+        <envConfigPath></envConfigPath>
+        <testSuiteClass></testSuiteClass>
+        <parallelRun></parallelRun>
+    </properties>
+
+    <!--In dependency management we are declaring name and version of the dependencies-->
+    <dependencyManagement>
+        <dependencies>
+            <!--Project related dependencies-->
+            <dependency>
+                <groupId>com.solera.global.qa.taf</groupId>
+                <artifactId>taf-core</artifactId>
+                <version>${sg.qa.taf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.solera.global.qa.taf.taf-tools</groupId>
+                <artifactId>tools-jlogger</artifactId>
+                <version>${sg.qa.taf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.solera.global.qa.taf</groupId>
+                <artifactId>taf-api</artifactId>
+                <version>${sg.qa.taf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.solera.global.qa.taf</groupId>
+                <artifactId>taf-web</artifactId>
+                <version>${sg.qa.taf.version}</version>
+            </dependency>
+
+            <!--Third party dependencies-->
+            <dependency>
+                <groupId>com.solera.global.qa</groupId>
+                <artifactId>s3-api</artifactId>
+                <version>1.3.8</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>5.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <!-- Build up all the dependencies at POMs before they are published -->
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <configuration>
+                            <updatePomFile>true</updatePomFile>
+                            <flattenMode>oss</flattenMode>
+                            <pomElements>
+                                <parent>expand</parent>
+                                <distributionManagement>remove</distributionManagement>
+                                <repositories>remove</repositories>
+                            </pomElements>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>Ernesto Zarate</name>
+            <email>ernesto.zaraterodriguez@Solera.com</email>
+        </developer>
+        <developer>
+            <name>Enrique Hernandez</name>
+            <email>enrique.hernandez@solera.com</email>
+        </developer>
+        <developer>
+            <name>Viridiana Cruz</name>
+            <email>viridiana.cruz@solera.com</email>
+        </developer>
+    </developers>
+
+</project>

@@ -1,0 +1,22 @@
+@Library('jenkins-pipeline-shared-lib-sample') _
+
+pipeline {
+    agent {
+        node {
+            label 'linux_slaves'
+        }
+    }
+    tools {
+        maven 'Maven_3.9.4'
+        jdk 'JDK_11'
+    }
+    stages {
+        stage ('Build') {
+            steps {
+                script{
+                    sh 'mvn clean install -DskipTests'
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,94 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Web - Regression",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "test",
+        "-Denv=development",
+        "-Dapp.config=development",
+        "-Dexec.env=remote.grid",
+        "-Pautoonline:web:regression",
+        "-Dtestrail.enabled=false",
+        "-Daws.s3.enabled=false",
+        "-DtestRunName=AUTOONLINE_MX_AUTO_REGRESSION_TEST",
+        "-Dbrowser=chrome",
+        "-f", "autoonline-web/pom.xml"
+      ],
+      "port": 0
+    },
+    {
+      "name": "Web - Sanity",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "test",
+        "-Denv=development",
+        "-Dapp.config=development",
+        "-Dexec.env=remote.grid",
+        "-Pautoonline:web:sanity",
+        "-Dtestrail.enabled=false",
+        "-Daws.s3.enabled=false",
+        "-DtestRunName=AUTOONLINE_MX_AUTO_REGRESSION_TEST",
+        "-Dbrowser=chrome",
+        "-f", "autoonline-web/pom.xml"
+      ],
+      "port": 0
+    },
+    {
+      "name": "Web - Debug",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "test",
+        "-Denv=development",
+        "-Dapp.config=development",
+        "-Dexec.env=remote.grid",
+        "-Pautoonline:web:debug",
+        "-Dtestrail.enabled=false",
+        "-Daws.s3.enabled=false",
+        "-DtestRunName=AUTOONLINE_MX_AUTO_REGRESSION_TEST",
+        "-Dbrowser=chrome",
+        "-f", "autoonline-web/pom.xml"
+      ],
+      "port": 0
+    },
+    {
+      "name": "Web - Debug Reports",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "test",
+        "-Denv=development",
+        "-Dapp.config=development",
+        "-Dexec.env=remote.grid",
+        "-Pautoonline:web:debugReports",
+        "-Dtestrail.enabled=false",
+        "-Daws.s3.enabled=false",
+        "-DtestRunName=AUTOONLINE_MX_AUTO_REGRESSION_TEST",
+        "-Dbrowser=chrome",
+        "-f", "autoonline-web/pom.xml"
+      ],
+      "port": 0
+    },
+    {
+      "name": "REST - Regression",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "test",
+        "-Ptemplate:rest:regression",
+        "-DtestRunName=LocalExecution",
+        "-f", "autoonline-rest/pom.xml"
+      ],
+      "port": 0
+    },
+    {
+      "name": "Build (sin tests)",
+      "runtimeExecutable": "mvn",
+      "runtimeArgs": [
+        "clean", "install",
+        "-DskipTests",
+        "-f", "pom.xml"
+      ],
+      "port": 0
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"JAVA_TOOL_OPTIONS\\\\|_JAVA_OPTIONS\\\\|jvmhook\")",
+      "Bash(cmd //c \"set JAVA_TOOL\")",
+      "Bash(cmd //c \"set _JAVA\")",
+      "Bash(powershell -Command \":*)",
+      "Bash(cmd //c \"reg query \"\"HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\"\" /v JAVA_TOOL_OPTIONS 2>&1\")",
+      "Bash(cmd //c 'reg query \"\"HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\"\" /v JAVA_TOOL_OPTIONS')",
+      "Bash(cmd //c \"reg query HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\\"\"Session Manager\"\"\\\\Environment /v JAVA_TOOL_OPTIONS\")"
+    ]
+  }
+}
