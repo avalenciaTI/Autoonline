@@ -21,6 +21,8 @@ public class RegistrationMenu extends BrowserPage {
     public static final String CASE_TYPE_FIELD = "//div[contains(@id,'caseType')]";
     public static final String GENERAL_SEARCH_FIELD = "search-cases_wildcard";
     public static final String SEARCH_TYPE_TOGGLE = "swap-search-button";
+    public static final String MARKET_CATALOG_REGISTER = "//a[@href='/catalogs/add/individual']";
+
 
 
     @FindBy(xpath = CASE_TLUNIVERSE)
@@ -35,7 +37,9 @@ public class RegistrationMenu extends BrowserPage {
     WebElement caseType;
     @FindBy(id = GENERAL_SEARCH_FIELD)
     WebElement generalSearchField;
-
+    //CATALOG
+    @FindBy(xpath = MARKET_CATALOG_REGISTER)
+    WebElement marketCatalogRegister;
 
 
     public RegistrationMenu() {
@@ -85,5 +89,13 @@ public class RegistrationMenu extends BrowserPage {
         jsClick(individualRegistrationCase);
         log().image("Individual Registration Case clicked", takeScreenshot());
         IndividualRegistration caseRegister = new IndividualRegistration();
+    }
+
+
+
+    public void clickRegisterCatalog() {
+        marketCatalogRegister = getElement(By.xpath(MARKET_CATALOG_REGISTER));
+        jsClick(marketCatalogRegister);
+        log().image("Individual Registration Case clicked", takeScreenshot());
     }
 }

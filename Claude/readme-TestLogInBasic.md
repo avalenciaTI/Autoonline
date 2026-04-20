@@ -51,10 +51,7 @@ public static void initializeVin() {
 | 39 | `tc39_caseVehicleValidateFiles` | Aprobar/validar documentos | `LogInPage`, `Documents` |
 | 40 | `tc40_caseVehicleLoadImages` | Cargar imágenes al caso | `LogInPage`, `Photos` |
 | 49 | `tc49_publicationCreationDiverse` | Crear publicación diversa | `LogInPage`, `PublicationCreation` |
-| 25 | `tc25_caseTransferCreation` | Crear caso Diversos (VIN nuevo) | `LogInPage`, `TransferIndividualRegistration` |
-| 28 | `tc28_miscellaneousGeneralConsultation` | Consulta general de casos tipo DIVERSOS | `LogInPage`, `IndividualRegistration`, `CaseSearch` |
-| 29 | `tc29_generalInquiryTransfer` | Consulta general de casos tipo TRASLADOS | `LogInPage`, `IndividualRegistration`, `CaseSearch` |
-| 53 | `tc53_caseAddImages` | Crear caso y agregar imágenes a Fotografías del caso | `LogInPage`, `IndividualRegistration`, `Photos` |
+| 53 | `tc53_caseAddImages` | Crear caso y agregar imágenes | `LogInPage`, `IndividualRegistration` |
 | 76 | `tc76_logInBuyerUser` | Login comprador + validar botones visibles | `LogInPage` |
 | 77 | `tc77_logInBuyerUser_ValidateButtons` | Igual que tc76 (duplicado explícito) | `LogInPage` |
 

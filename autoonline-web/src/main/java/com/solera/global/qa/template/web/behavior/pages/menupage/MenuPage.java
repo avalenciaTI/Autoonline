@@ -20,7 +20,7 @@ public class MenuPage extends BrowserPage {
             "//li[@class='ant-menu-submenu ant-menu-submenu-vertical ant-menu-submenu-open ant-menu-submenu-active']"
                     + "//li[2]";
 
-    private static final String CATALOGS_SECTION = "(//div[@class='ant-menu-submenu-title'])[6]";
+    private static final String CATALOGS_SECTION = "//i[@class='anticon anticon-apartment']";
     private static final String TRANSFERS_SECTION = "(//div[@class='ant-menu-submenu-title'])[7]";
     private static final String PUBLICATIONS_SECTION = "(//div[@class='ant-menu-submenu-title'])[8]";
     private static final String INVENTORY_SECTION = "(//div[@class='ant-menu-submenu-title'])[9]";
@@ -81,8 +81,10 @@ public class MenuPage extends BrowserPage {
         return new RegistrationMenu();
     }
 
-    public void clickCatalogs() {
+    public RegistrationMenu clickCatalogs() {
         click(catalogsSection);
+        waitForElementVisibility(getElement(By.xpath(CATALOGS_SECTION)), Timeouts.LOAD_ELEMENT);
+        return new RegistrationMenu();
     }
 
     public void clickTransfers() {

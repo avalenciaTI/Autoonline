@@ -1,30 +1,22 @@
 package com.solera.global.qa.template.web.behavior.pages.casecreation.transfercase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
-import com.solera.global.qa.template.web.behavior.data.types.AolWebUser;
 import com.solera.global.qa.template.web.behavior.pages.casecreation.RegistrationMenu;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CompleteWebElement;
-import com.solera.global.qa.template.web.behavior.pages.loginpage.LogInPage;
 import com.solera.global.qa.template.web.behavior.pages.menupage.MenuPage;
 import com.solera.global.qa.template.web.behavior.pages.usercreation.individualregistration.AdministratorMasterInter;
-import com.solera.global.qa.template.web.behavior.pages.usercreation.MassiveRegistrationUsers;
 
-
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.FluentWait;
 
 
 @Slf4j
@@ -115,9 +107,46 @@ public class TransferIndividualRegistration extends BrowserPage {
 
     public static final String CASE_NUMBER_FIELD = "//input[contains(@id,'caseId') and string-length(@value)>0]";
     private static final String NOTIFICATION_WINDOW = "//div[contains(@class,'bottomRight')]";
+    //"//div[@class='ant-notification-notice-message'][contains(.,'El registro del catálogo se realizó correctamente.')]";
+    
+
+    //div[@class='ant-notification-notice-message'][contains(.,'El registro del catálogo se realizó correctamente.')]
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
     private static final String UPDATE_BUTTON = "//button[contains(@data-testid,'update')]";
     public static final String INPUT = "input";
+
+    //MARKET CATALOG
+    public static final String CATALOG_TYPE_FIELD = "//div[contains(@id,'typeCatalog')]";
+    public static final String BUSINESS_NAME_FIELD = "//input[contains(@id,'businessName')]";
+    public static final String MARKETS_NAME_FIELD = "//input[contains(@id,'add-catalog-markets_name')]";
+    public static final String MARKET_RFC_FIELD = "//input[contains(@id,'add-catalog-markets_taxId')]";
+    public static final String MARKET_COUNTRY_FIELD = 
+    "//div[contains(@id,'countryId')] | //input[contains(@id,'countryId')]";
+    public static final String MARKET_STATE_FIELD = 
+    "//div[contains(@id,'stateId')] | //input[contains(@id,'stateId')]";
+    public static final String ROAD_NAME_FIELD = "//input[contains(@id,'roadName')]";
+    public static final String OUT_NUMER_FIELD = "//input[contains(@id,'outNumber')]";
+    public static final String IN_NUMER_FIELD = "//input[contains(@id,'inNumber')]";
+    public static final String ZIP_CODE_CATALOG_FIELD = "//input[contains(@id,'zipCode')]";
+    public static final String NEIGHBORHOOD_CATALOG_FIELD = "//input[contains(@id,'neighborhood')]";
+    public static final String TOWN_CATALOG_FIELD = "//input[contains(@id,'town')]";
+    public static final String CITY_CATALOG_FIELD = "//input[contains(@id,'city')]";
+    public static final String SERVICE_CATALOG_FIELD = "//input[contains(@class,'ant-checkbox-input')]";
+    public static final String PREFIX_CATALOG_FIELD = "//input[contains(@id,'prefix')]";
+    public static final String COST_CATALOG_FIELD = "//input[contains(@id,'managingCostDiverse')]";
+    public static final String CARRIER_COST_CATALOG_FIELD = "//input[contains(@id,'carrierCostDiverse')]";
+    public static final String BANK_ACCOUND_CATALOG_FIELD = "//input[contains(@id,'bankAccountDiverse')]";
+    public static final String CLABE_ACCOUND_CATALOG_FIELD = "//input[contains(@id,'clabeAccountDiverse')]";
+    public static final String BANK_NAME_CATALOG_FIELD = "//input[contains(@id,'bankNameDiverse')]";
+    public static final String CIE_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'cieDiverse')]";
+    public static final String PERCENTAGE_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'percentageDiverse')]";
+    public static final String LIMIT_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'limitDiverse')]";
+    public static final String AMOUNT_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'amountDiverse')]";
+
+
+
+
+
 
 
     @FindBy(xpath = CASE_TYPE_FIELD)
@@ -242,6 +271,56 @@ public class TransferIndividualRegistration extends BrowserPage {
     WebElement notificationWindow;
     @FindBy(xpath = UPDATE_BUTTON)
     WebElement updateButton;
+
+    //Catalog
+    @FindBy(xpath = BUSINESS_NAME_FIELD)
+    WebElement businessNameField;
+    @FindBy(xpath = MARKETS_NAME_FIELD)
+    WebElement marketsNameField;
+    @FindBy(xpath = MARKET_RFC_FIELD)
+    WebElement marketRfcField;
+    @FindBy(xpath = MARKET_COUNTRY_FIELD)
+    WebElement marketCountryField;
+    @FindBy(xpath = MARKET_STATE_FIELD)
+    WebElement marketStateField;
+    @FindBy(xpath = ROAD_NAME_FIELD)
+    WebElement roadNameField;
+    @FindBy(xpath = OUT_NUMER_FIELD)
+    WebElement outNumerField;
+    @FindBy(xpath = IN_NUMER_FIELD)
+    WebElement inNumerField;
+    @FindBy(xpath = ZIP_CODE_CATALOG_FIELD)
+    WebElement zipCodeCatalogField;
+    @FindBy(xpath = NEIGHBORHOOD_CATALOG_FIELD)
+    WebElement neighborhoodCatalogField;
+    @FindBy(xpath = TOWN_CATALOG_FIELD)
+    WebElement townCatalogField;
+    @FindBy(xpath = CITY_CATALOG_FIELD)
+    WebElement cityCatalogField;
+    @FindBy(xpath = SERVICE_CATALOG_FIELD)
+    WebElement serviceCatalogField;
+    @FindBy(xpath = PREFIX_CATALOG_FIELD)
+    WebElement prefixCatalogField;
+    @FindBy(xpath = COST_CATALOG_FIELD)
+    WebElement costCatalogField;
+    @FindBy(xpath = CARRIER_COST_CATALOG_FIELD)
+    WebElement carrierCostCatalogField;
+    @FindBy(xpath = BANK_ACCOUND_CATALOG_FIELD)
+    WebElement bankAccountCatalogField;
+    @FindBy(xpath = CLABE_ACCOUND_CATALOG_FIELD)
+    WebElement clabeAccountCatalogField;
+    @FindBy(xpath = BANK_NAME_CATALOG_FIELD)
+    WebElement bankNameCatalogField;
+    @FindBy(xpath = CIE_DIVERSE_CATALOG_FIELD)
+    WebElement cieDiverseCatalogField;
+    @FindBy(xpath = PERCENTAGE_DIVERSE_CATALOG_FIELD)
+    WebElement percentageDiverseCatalogField;
+    @FindBy(xpath = LIMIT_DIVERSE_CATALOG_FIELD)
+    WebElement limitDiverseCatalogField;
+    @FindBy(xpath = AMOUNT_DIVERSE_CATALOG_FIELD)
+    WebElement amountDiverseCatalogField;
+    @FindBy(xpath = CATALOG_TYPE_FIELD)
+    WebElement catalogTypeField;
 
     ///
     public static final String SEARCH_DYNAMIC = "//td[text()='?']";
@@ -401,6 +480,52 @@ public class TransferIndividualRegistration extends BrowserPage {
         return list;
     }
 
+//Field list catalog market
+    public List<CompleteWebElement> fillCatalogMarket(String vin, String businnesN) {
+        log.info("In fillCatalogMarket:");
+        log.info("Catalog type selector found");
+        new CommonComponents().selectFromGlobalAntDropdownOption(catalogTypeField, "Mercado (aseguradora)");
+
+        storedValues = fillField(businessNameField, AdministratorMasterInter.generateDynamicName(), storedValues);
+
+        storedValues = fillField(marketsNameField, "ANA COMPAÑIA DE SEGUROS, S.A. DE C.V.", storedValues);
+        storedValues = fillField(marketRfcField, "FQJH761021PH2", storedValues);
+        storedValues = fillField(marketCountryField, "Mexico", storedValues);
+        storedValues = fillField(marketStateField, "QUERETARO", storedValues);
+        storedValues = fillField(roadNameField, "Nicolas campa", storedValues);
+        storedValues = fillField(outNumerField, "12", storedValues);
+        storedValues = fillField(inNumerField, "2", storedValues);
+        storedValues = fillField(zipCodeCatalogField, "76116", storedValues);
+        storedValues = fillField(neighborhoodCatalogField, "Centro", storedValues);
+        storedValues = fillField(townCatalogField, "Santiado de Queretaro", storedValues);
+        storedValues = fillField(cityCatalogField, "Queretaro", storedValues);
+        storedValues = fillField(prefixCatalogField, AdministratorMasterInter.generateDynamicPrefix(), storedValues);
+
+        log().image("Middle fulled catalog", takeScreenshot());
+        click(serviceCatalogField);
+
+        storedValues = fillField(costCatalogField, "10000", storedValues);
+        storedValues = fillField(carrierCostCatalogField, "2000", storedValues);
+        storedValues = fillField(bankAccountCatalogField, "889778978978", storedValues);
+        storedValues = fillField(clabeAccountCatalogField, "111111111111111111", storedValues);
+        storedValues = fillField(bankNameCatalogField, "BBVA BANCOMER", storedValues);
+        storedValues = fillField(cieDiverseCatalogField, "1251848", storedValues);
+        storedValues = fillField(percentageDiverseCatalogField, "15", storedValues);
+        storedValues = fillField(limitDiverseCatalogField, "0", storedValues);
+        storedValues = fillField(amountDiverseCatalogField, "100", storedValues);
+
+        log().image("fill fulled catalog", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        waitForElementPresence(notificationWindow.findElement(By.xpath(NOTIFICATION_MESSAGE)),Timeouts.NOTIFICATION_DISPLAYED);
+
+
+        return storedValues;
+    }
+
+
+
+
+
     private void fillField(WebElement webElement, String value) {
         if (webElement.getTagName().contains(INPUT)) {
             sendKeys(webElement,value);
@@ -500,6 +625,18 @@ public class TransferIndividualRegistration extends BrowserPage {
 
         Integer results = transferIndividualRegistration.validateCaseCreation(values2ValidateTransfer);
         log().image(CLASS_NAME + " correct " + results,takeScreenshot());
+        return true;
+
+    }
+
+
+
+    public boolean marketRegistrationCatalog(String vin) {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCatalogs();
+        casesMenu.clickRegisterCatalog();
+        TransferIndividualRegistration transferIndividualRegistration = new TransferIndividualRegistration();
+        transferIndividualRegistration.fillCatalogMarket(vin, "TESTTRANSFERAUTOAMTED");
         return true;
 
     }

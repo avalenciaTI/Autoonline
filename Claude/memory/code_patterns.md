@@ -200,41 +200,6 @@ updateElement(element)                                            // retry para 
 ```
 **Nota importante sobre fillField:** `getIndex()` hace 2 `findElements` al DOM por llamada. En remote grid con 5 campos = ~10 round-trips extra. Siempre usar el overload con `int 0` en páginas sin stepper.
 
-## IndividualRegistration — flujos de caso ya implementados
-```java
-vehicleIndividualRegistration(vin, caseData)            // Crear caso vehículo + validar
-vehicleIndividualRegistration_AddImages(vin, caseData)  // Crear caso + subir imágenes (CP053)
-miscellaneousGeneralConsultation()                      // Consulta casos DIVERSOS (CP028)
-generalInquiryTransfer()                                // Consulta casos TRASLADOS (CP029)
-```
-
-## Patrón de upload de archivos (input[type='file'] oculto)
-```java
-// NO hacer click en el botón "Adjuntar" — abre el diálogo nativo del OS
-// NO usar waitForElementToBeClickable — el input oculto nunca es "clickable"
-// CORRECTO: sendKeys directo al input oculto
-getElement(By.xpath("//input[@type='file']")).sendKeys(absoluteFilePath);
-```
-**Construcción del path sin encoding:**
-```java
-// MAL: getAttachmentsFolderFilePath() → ClassLoader.getResource().getPath() → "...%c3%ad..."
-// BIEN: File.getAbsolutePath() desde ruta relativa → path nativo sin encoding
-String basePath = new File("src/test/resources/attachments/images15/").getAbsolutePath() + File.separator;
-```
-
-## Patrón de consulta/búsqueda de casos (CP028/CP029)
-```java
-// Validar que los resultados cargaron → usar REPORT_BUTTON, NO generalSearch() boolean
-casesMenu.consultCases();  // navega a /cases/search
-new CommonComponents().selectFromDropdownText(
-        getElement(By.xpath(CaseSearch.CASE_TYPE_FIELD)), CaseType.VARIOUS.getCaseType());
-sendKeys(getElement(By.id(CaseSearch.GENERAL_SEARCH_FIELD)), "criteria");
-new Buttons().clickSearchBtn();
-waitForElementPresence(By.xpath(CaseSearch.REPORT_BUTTON), Timeouts.LOAD_RESULTS);
-return true;
-// CaseSearch.generalSearch() tiene bug: contains(text(),'X') no encuentra texto anidado en <span>/<a>
-```
-
 ## AdministratorMasterInter — flujos de usuario ya implementados
 ```java
 individualRegistrationAdminMaster(user)           // Admin Master

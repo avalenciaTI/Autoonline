@@ -358,51 +358,16 @@ public class IndividualRegistration extends BrowserPage {
         return true;
     }
 
-    public boolean generalInquiryTransfer() {
+
+    public boolean miscellaneousAdvancedQuery() {
         MenuPage menuPage = new MenuPage();
         RegistrationMenu casesMenu = menuPage.clickCases();
         log.info("Navigating to Cases > Consulta");
         casesMenu.consultCases();
         log().image("Consult cases page loaded", takeScreenshot());
-        log.info("Running general search with type TRANSFER");
-        new CaseSearch().generalSearch(CaseType.TRANSFERS, "QAT2604001381");
-        log().image("General Inquiry Transfer", takeScreenshot());
-        return true;
-    }
-
-    public boolean advancedConsultationVehicles(String vin) {
-        MenuPage menuPage = new MenuPage();
-        RegistrationMenu casesMenu = menuPage.clickCases();
-        log.info("Navigating to Cases > Consulta");
-        casesMenu.consultCases();
-        log().image("Consult cases page loaded", takeScreenshot());
-        log.info("Switching to advanced search with type VEHÍCULOS");
-        CaseSearch caseSearch = new CaseSearch();
-        caseSearch.advanceSearch(CaseType.VEHICLES);
-        log().image("Advanced search activated", takeScreenshot());
-        new CaseSearch().advanceSearch(CaseType.VEHICLES, "QAT2604001381");
-
-        //caseSearch.fillFilterField("niu", vin);
-        new Buttons().clickSearchBtn();
-        waitForElementPresence(By.xpath(CaseSearch.REPORT_BUTTON), Timeouts.LOAD_RESULTS);
-        log().image("Advanced consultation vehicles results", takeScreenshot());
-        return true;
-    }
-
-    public boolean advancedConsultationTransfers() {
-        MenuPage menuPage = new MenuPage();
-        RegistrationMenu casesMenu = menuPage.clickCases();
-        log.info("Navigating to Cases > Consulta");
-        casesMenu.consultCases();
-        log().image("Consult cases page loaded", takeScreenshot());
-        log.info("Switching to advanced search with type TRASLADOS");
-        CaseSearch caseSearch = new CaseSearch();
-        caseSearch.advanceSearch(CaseType.TRANSFERS);
-        log().image("Advanced search activated", takeScreenshot());
-        caseSearch.fillFilterField("niu", "QAT2604001381");
-        new Buttons().clickSearchBtn();
-        waitForElementPresence(By.xpath(CaseSearch.REPORT_BUTTON), Timeouts.LOAD_RESULTS);
-        log().image("Advanced consultation transfers results", takeScreenshot());
+        log.info("Running Advance Query");
+        new CaseSearch().advanceSearchQuery(CaseType.VARIOUS, "ANA2604001377");
+        log().image("Miscellaneous consultation results", takeScreenshot());
         return true;
     }
 

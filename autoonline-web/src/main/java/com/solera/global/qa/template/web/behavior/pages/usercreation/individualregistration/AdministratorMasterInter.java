@@ -39,9 +39,11 @@ public class AdministratorMasterInter extends BrowserPage {
     private static final String EMAIL_DOMAIN = "@test.com";
     private static final String NAME_PREFIX = "Automatizacion";
     private static final String ALPHANUMERIC_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String ALFAPREFIX = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final SecureRandom RANDOM = new SecureRandom();
     private static String lastGeneratedEmail;
     private static String lastGeneratedName;
+    private static String lastPrefix;
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
     private static final String CLOSE_NOTIFICATION_XP = "//i[@class='anticon anticon-close ant-notification-close-icon']";
     private static final String EXISTENT_EMAIL_NOT = "//div[contains(text(),'El correo electrónico ingresado "
@@ -69,6 +71,18 @@ public class AdministratorMasterInter extends BrowserPage {
         lastGeneratedName = NAME_PREFIX + " " + suffix;
         return lastGeneratedName;
     }
+
+
+    public static String generateDynamicPrefix() {
+        StringBuilder suffix = new StringBuilder(3);
+        for (int i = 0; i < 3; i++) {
+            suffix.append(ALFAPREFIX.charAt(RANDOM.nextInt(ALFAPREFIX.length())));
+        }
+        lastPrefix = " " + suffix;
+        return lastPrefix;
+    }
+
+
 
     public static String getLastGeneratedName() {
         return lastGeneratedName != null ? lastGeneratedName : generateDynamicName();

@@ -20,8 +20,10 @@ public class CaseSearch extends BrowserPage {
     public static final String SEARCH_CASES = "//a[@href='/cases/search']";
     public static final String CASE_TYPE_FIELD = "//div[contains(@id,'caseType')]";
     public static final String GENERAL_SEARCH_FIELD = "search-cases_wildcard";
+    public static final String ADVANCE_SEARCH_FIELD = "search-cases_caseId";
     public static final String REPORT_BUTTON = "//button[@jest-id = 'reportButton']";
     public static final String GENERAL_SEARCH_CRITERIA = "//a[contains(text(), '?')]";
+    public static final String ADVANCE_SEARCH_CRITERIA_QUERY = "//a[contains(text(), '?')]";
     public static final String ADVANCE_SEARCH_CRITERIA= "//button[@id='swap-search-button']";
     public static final String SEARCH_FILTER_GENERAL = "//input[contains(@data-testid,'data_test_?')]";
 
@@ -60,6 +62,33 @@ public class CaseSearch extends BrowserPage {
             log.info("Advance search already selected");
         }
 
+    }
+
+
+
+    public boolean advanceSearchQuery(CaseType caseTypeVal, String searchCriteria){
+        new CommonComponents().selectFromDropdownText(getElement(By.xpath(CASE_TYPE_FIELD)),caseTypeVal.getCaseType());
+        WebElement searchStatusButton=getDriver().findElement(By.xpath(ADVANCE_SEARCH_CRITERIA+"//span"));
+        if(searchStatusButton.getText().equals("Búsqueda avanzada")){
+            log.info("Type of search changed from general to advance");
+            click(getDriver().findElement(By.xpath(ADVANCE_SEARCH_CRITERIA)));
+
+            sendKeys(getElement(By.id(ADVANCE_SEARCH_FIELD)),searchCriteria);
+            log.info("search criteria selected");
+            log().image("search criteria selected", takeScreenshot());
+            new Buttons().clickSearchBtn();
+            log.info("search button clicked");
+            waitForElementVisibility(getElement(By.xpath(REPORT_BUTTON)), Timeouts.LOAD_RESULTS);
+            log().image("Results", takeScreenshot());
+            String criteriaResults = ADVANCE_SEARCH_CRITERIA_QUERY.replace("?", searchCriteria);
+            log.info("ending clickSearchCases..");
+            return getElement(By.xpath(criteriaResults)).isDisplayed();
+
+        }else {
+            log.info("Advance search already selected");
+        }
+
+        return true;
     }
 
     public void fillFilterField(String genericField, String searchCriteria){

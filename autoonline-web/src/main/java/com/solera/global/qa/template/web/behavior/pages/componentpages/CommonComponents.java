@@ -112,6 +112,27 @@ public class CommonComponents extends BrowserPage {
         log().image("Option not found in list: " + text, takeScreenshot());
     }
 
+    public void selectFromGlobalAntDropdownOption(WebElement dropDownElement, String optionText) {
+        click(dropDownElement);
+
+        By antV4Option = By.xpath("//div[contains(@class,'ant-select-dropdown') and "
+                + "not(contains(@class,'hidden'))]//div[contains(@class,'ant-select-item-option-content') "
+                + "and normalize-space()='" + optionText + "']");
+        By antV3Option = By.xpath("//div[contains(@class,'ant-select-dropdown') and "
+                + "not(contains(@class,'hidden'))]//li[normalize-space()='" + optionText + "']");
+
+        List<WebElement> options = getDriver().findElements(antV4Option);
+        if (options.isEmpty()) {
+            options = getDriver().findElements(antV3Option);
+        }
+
+        if (options.isEmpty()) {
+            throw new NoSuchElementException("Dropdown option not found: " + optionText);
+        }
+
+        click(options.get(0));
+    }
+
     private By getByFromLocalWebElement(WebElement element) {
         String byType;
         String byValue;

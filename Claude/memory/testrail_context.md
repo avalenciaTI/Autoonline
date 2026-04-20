@@ -38,25 +38,6 @@ type: project
 
 ## Casos automatizados en esta sesión
 
-### CP053 — Add images to Fotografías del caso ✅ COMPLETADO
-- **TestRail ID:** 160928
-- **Clase de test:** `TestLogInBasic.java` → `tc53_caseAddImages()` (priority = 53)
-- **Método principal:** `IndividualRegistration.vehicleIndividualRegistration_AddImages(vin, caseData)`
-- **Flujo:** crea caso vehículo → busca por VIN → valida creación → `Photos.attachImages(true)` → `Photos.markAsFavorite()`
-- **Fixes en Photos.java:** path URL-encoded (`%c3%ad`) → `folder.getAbsolutePath()`; eliminado `jsClick` en file input; `sendKeys` directo al `input[type='file']` oculto
-
-### CP028 — Miscellaneous general consultation ✅ COMPLETADO
-- **TestRail ID:** 3936394
-- **Clase de test:** `TestLogInBasic.java` → `tc28_miscellaneousGeneralConsultation()` (priority = 28)
-- **Método principal:** `IndividualRegistration.miscellaneousGeneralConsultation()`
-- **Flujo:** Casos > Consulta → tipo DIVERSOS → busca "ANA2604001377" → `waitForElementPresence(REPORT_BUTTON)` → `true`
-
-### CP029 — General inquiry transfers ✅ COMPLETADO
-- **TestRail ID:** 3936395
-- **Clase de test:** `TestLogInBasic.java` → `tc29_generalInquiryTransfer()` (priority = 29)
-- **Método principal:** `IndividualRegistration.generalInquiryTransfer()`
-- **Flujo:** igual que CP028 pero tipo TRASLADOS y busca "QAT2604001381"
-
 ### CP022 — Invite individual buyers ✅ COMPLETADO
 - **TestRail ID:** 3936386
 - **Clase de test:** `TestLogInBasic.java` → método `tc22_inviteIndividualBuyer()` (priority = 22)
