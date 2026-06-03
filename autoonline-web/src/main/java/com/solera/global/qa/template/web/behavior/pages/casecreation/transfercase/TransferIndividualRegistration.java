@@ -489,7 +489,7 @@ public class TransferIndividualRegistration extends BrowserPage {
         storedValues = fillField(businessNameField, AdministratorMasterInter.generateDynamicName(), storedValues);
 
         storedValues = fillField(marketsNameField, "ANA COMPAÑIA DE SEGUROS, S.A. DE C.V.", storedValues);
-        storedValues = fillField(marketRfcField, "FQJH761021PH2", storedValues);
+        storedValues = fillField(marketRfcField, "OZQY880822EU6", storedValues);
         storedValues = fillField(marketCountryField, "Mexico", storedValues);
         storedValues = fillField(marketStateField, "QUERETARO", storedValues);
         storedValues = fillField(roadNameField, "Nicolas campa", storedValues);
@@ -513,9 +513,11 @@ public class TransferIndividualRegistration extends BrowserPage {
         storedValues = fillField(percentageDiverseCatalogField, "15", storedValues);
         storedValues = fillField(limitDiverseCatalogField, "0", storedValues);
         storedValues = fillField(amountDiverseCatalogField, "100", storedValues);
-
         log().image("fill fulled catalog", takeScreenshot());
+        sleep(5000);
+
         new Buttons().jsClickAcceptButton();
+        sleep(2000);
         waitForElementPresence(notificationWindow.findElement(By.xpath(NOTIFICATION_MESSAGE)),Timeouts.NOTIFICATION_DISPLAYED);
 
 

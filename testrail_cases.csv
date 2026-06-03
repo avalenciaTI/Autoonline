@@ -1,0 +1,134 @@
+Section,Test ID,Test Case ID,Title,URL
+Users,"T3936365","3936365","CP001_Admin Internal user registration",https://testrail.solera.com/index.php?/tests/view/3936365
+Users,"T3936366","3936366","CP002_Admin Master user registration",https://testrail.solera.com/index.php?/tests/view/3936366
+Users,"T3936367","3936367","CP003_Secured admin user registration",https://testrail.solera.com/index.php?/tests/view/3936367
+Users,"T3936368","3936368","CP004_Insurance administrator(Intern) user registration",https://testrail.solera.com/index.php?/tests/view/3936368
+Users,"T3936369","3936369","CP005_Physical Buyer user registration",https://testrail.solera.com/index.php?/tests/view/3936369
+Users,"T3936370","3936370","CP006_Moral buyer user registration",https://testrail.solera.com/index.php?/tests/view/3936370
+Users,"T3936371","3936371","CP007_Vendor Administrator user registration",https://testrail.solera.com/index.php?/tests/view/3936371
+Users,"T3936372","3936372","CP008_Master Administrator general consult",https://testrail.solera.com/index.php?/tests/view/3936372
+Users,"T3936373","3936373","CP009_Internal Administrator general consult",https://testrail.solera.com/index.php?/tests/view/3936373
+Users,"T3936374","3936374","CP010_Insured general consult",https://testrail.solera.com/index.php?/tests/view/3936374
+Users,"T3936375","3936375","CP011_General insurance consult",https://testrail.solera.com/index.php?/tests/view/3936375
+Users,"T3936376","3936376","CP012_General Physical Buyer consult",https://testrail.solera.com/index.php?/tests/view/3936376
+Users,"T3936377","3936377","CP013_General Moral Buyer consult",https://testrail.solera.com/index.php?/tests/view/3936377
+Users,"T3936378","3936378","CP14_General Supplier Crane consult",https://testrail.solera.com/index.php?/tests/view/3936378
+Users,"T3936379","3936379","CP015_Advance consult Master Administrator",https://testrail.solera.com/index.php?/tests/view/3936379
+Users,"T3936380","3936380","CP016_Advance consult Internal Administrator",https://testrail.solera.com/index.php?/tests/view/3936380
+Users,"T3936381","3936381","CP017_Advance consult Insured Master",https://testrail.solera.com/index.php?/tests/view/3936381
+Users,"T3936382","3936382","CP018_Advance consult Insurance Master",https://testrail.solera.com/index.php?/tests/view/3936382
+Users,"T3936383","3936383","CP019_Advance consult Buyer Physical",https://testrail.solera.com/index.php?/tests/view/3936383
+Users,"T3936384","3936384","CP020_Advance consult Buyer Moral",https://testrail.solera.com/index.php?/tests/view/3936384
+Users,"T3936385","3936385","CP21_Advance consult Supplier Crane",https://testrail.solera.com/index.php?/tests/view/3936385
+Users,"T3936386","3936386","CP022_Invite individual buyers",https://testrail.solera.com/index.php?/tests/view/3936386
+Users,"T3936387","3936387","CP023_Invite bulk buyers",https://testrail.solera.com/index.php?/tests/view/3936387
+Login,"T3936388","3936388","CP024_Login New User",https://testrail.solera.com/index.php?/tests/view/3936388
+Login,"T3936389","3936389","CP076_Login to the system with buyer user",https://testrail.solera.com/index.php?/tests/view/3936389
+Login,"T3936390","3936390","CP077_Consultation of options for buyer profile",https://testrail.solera.com/index.php?/tests/view/3936390
+Cases,"T3936391","3936391","CP025_Various individual case record",https://testrail.solera.com/index.php?/tests/view/3936391
+Cases,"T3936392","3936392","CP026_Record of individual case transfers",https://testrail.solera.com/index.php?/tests/view/3936392
+Cases,"T3936393","3936393","CP027_Vehicle individual case record",https://testrail.solera.com/index.php?/tests/view/3936393
+Inventory,"T3936493","3936493","CP053_Add images to the ""Fotografías del caso"" section.",https://testrail.solera.com/index.php?/tests/view/3936493
+Cases,"T3936394","3936394","CP028_Miscellaneous general consultation",https://testrail.solera.com/index.php?/tests/view/3936394
+Cases,"T3936395","3936395","CP029_General inquiry transfers",https://testrail.solera.com/index.php?/tests/view/3936395
+Cases,"T3936396","3936396","CP030_General consultation vehicles",https://testrail.solera.com/index.php?/tests/view/3936396
+Cases,"T3936397","3936397","CP031_Miscellaneous advanced query",https://testrail.solera.com/index.php?/tests/view/3936397
+Cases,"T3936398","3936398","CP032_Advanced consultation transfers",https://testrail.solera.com/index.php?/tests/view/3936398
+Cases,"T3936399","3936399","CP033_Advanced vehicle consultation",https://testrail.solera.com/index.php?/tests/view/3936399
+Cases,"T3936400","3936400","CP034_Miscellaneous mass record",https://testrail.solera.com/index.php?/tests/view/3936400
+Cases,"T3936401","3936401","CP035_Massive vehicle registration publication",https://testrail.solera.com/index.php?/tests/view/3936401
+Cases,"T3936402","3936402","CP036_Massive vehicle registration management",https://testrail.solera.com/index.php?/tests/view/3936402
+Cases,"T3936403","3936403","CP037_Generate compensation",https://testrail.solera.com/index.php?/tests/view/3936403
+Cases,"T3936404","3936404","CP038_Attach documents to a case",https://testrail.solera.com/index.php?/tests/view/3936404
+Cases,"T3936405","3936405","CP039_Approve documents",https://testrail.solera.com/index.php?/tests/view/3936405
+Cases,"T3936406","3936406","CP040_Attach images to a case",https://testrail.solera.com/index.php?/tests/view/3936406
+Transfers,"T3936407","3936407","CP047_[Transfer Section][General transfer consultation]",https://testrail.solera.com/index.php?/tests/view/3936407
+Transfers,"T3936408","3936408","CP048_Advanced transfer consultation",https://testrail.solera.com/index.php?/tests/view/3936408
+Publications,"T3936409","3936409","CP049_Register publication of various cases",https://testrail.solera.com/index.php?/tests/view/3936409
+Publications,"T3936410","3936410","CP050_Register vehicle publication",https://testrail.solera.com/index.php?/tests/view/3936410
+Publications,"T3936411","3936411","CP051_Update various publication",https://testrail.solera.com/index.php?/tests/view/3936411
+Publications,"T3936412","3936412","CP052_Update vehicle publication",https://testrail.solera.com/index.php?/tests/view/3936412
+Catalog,"T3936413","3936413","CP041_Register market catalogs (insurer)",https://testrail.solera.com/index.php?/tests/view/3936413
+Catalog,"T3936414","3936414","CP042_Register supplier catalogs",https://testrail.solera.com/index.php?/tests/view/3936414
+Catalog,"T3936415","3936415","CP043_Register supplier branch catalogs",https://testrail.solera.com/index.php?/tests/view/3936415
+Catalog,"T3936416","3936416","CP044_Consult market catalogs (insurer)",https://testrail.solera.com/index.php?/tests/view/3936416
+Catalog,"T3936417","3936417","CP045_Consult supplier catalogs",https://testrail.solera.com/index.php?/tests/view/3936417
+Catalog,"T3936418","3936418","CP046_Consult supplier branch catalogs",https://testrail.solera.com/index.php?/tests/view/3936418
+Transfers,"T3936419","3936419","CP087_Generation of transfers",https://testrail.solera.com/index.php?/tests/view/3936419
+Transfers,"T3936421","3936421","CP090_Transfer consultation",https://testrail.solera.com/index.php?/tests/view/3936421
+Users,"T3936472","3936472","CP009_Initialize transfer",https://testrail.solera.com/index.php?/tests/view/3936472
+Transfers,"T3936420","3936420","CP0888_Upload ""recoleccion de vehiculo"" photos in transfer",https://testrail.solera.com/index.php?/tests/view/3936420
+Inventory,"T3936422","3936422","CP107_Photographs of vehicle delivery",https://testrail.solera.com/index.php?/tests/view/3936422
+Inventory,"T3936423","3936423","CP053_Inventory consultation",https://testrail.solera.com/index.php?/tests/view/3936423
+Users,"T3936471","3936471","CP010_Verify at least 6 images required to entry inventory",https://testrail.solera.com/index.php?/tests/view/3936471
+Inventory,"T3936424","3936424","CP085_Uploading photos of entrance to corralon",https://testrail.solera.com/index.php?/tests/view/3936424
+Inventory,"T3936425","3936425","CP086_Corralon output photo upload",https://testrail.solera.com/index.php?/tests/view/3936425
+Inventory,"T3936426","3936426","CP084_Exit inventory",https://testrail.solera.com/index.php?/tests/view/3936426
+Publications,"T3936427","3936427","CP078_Display of publications online",https://testrail.solera.com/index.php?/tests/view/3936427
+Publications,"T3936428","3936428","CP079_Display of publications archived.",https://testrail.solera.com/index.php?/tests/view/3936428
+Publications,"T3936429","3936429","CP080_Make offer",https://testrail.solera.com/index.php?/tests/view/3936429
+Publications,"T3936430","3936430","CP081_See detail of the publication",https://testrail.solera.com/index.php?/tests/view/3936430
+Publications,"T3936431","3936431","CP091_favorite photographs at auction general section",https://testrail.solera.com/index.php?/tests/view/3936431
+Publications,"T3936432","3936432","CP092_favorite photographs at auction detail section",https://testrail.solera.com/index.php?/tests/view/3936432
+Awards,"T3936433","3936433","CP054_Consult Adjudications",https://testrail.solera.com/index.php?/tests/view/3936433
+Awards,"T3936434","3936434","CP055_Adjudicate a unit.",https://testrail.solera.com/index.php?/tests/view/3936434
+Awards,"T3936435","3936435","CP056_Do not adjudicate a unit.",https://testrail.solera.com/index.php?/tests/view/3936435
+Awards,"T3936436","3936436","CP082_Upload documents for payment",https://testrail.solera.com/index.php?/tests/view/3936436
+Reports,"T3936437","3936437","CP083_Send documents for payment",https://testrail.solera.com/index.php?/tests/view/3936437
+Awarding Buyer,"T3936481","3936481","[Awards][Vehicle] Bulk references registration",https://testrail.solera.com/index.php?/tests/view/3936481
+Awarding Buyer,"T3936482","3936482","[Awards][Vehicle] Bulk awarding registration",https://testrail.solera.com/index.php?/tests/view/3936482
+Payments,"T3936438","3936438","CP057_consult payments",https://testrail.solera.com/index.php?/tests/view/3936438
+Payments,"T3936439","3936439","CP058_Download payment document",https://testrail.solera.com/index.php?/tests/view/3936439
+Payments,"T3936440","3936440","CP059_Payment validation",https://testrail.solera.com/index.php?/tests/view/3936440
+paymentFile,"T3936494","3936494","toBeDocumented [ManagerUser][Download payment Folder]",https://testrail.solera.com/index.php?/tests/view/3936494
+paymentFile,"T3936497","3936497","toBeDocumented upload Payment File - success",https://testrail.solera.com/index.php?/tests/view/3936497
+paymentFile,"T3936495","3936495","toBeDocumented upload Payment File - add file of no current consult",https://testrail.solera.com/index.php?/tests/view/3936495
+paymentFile,"T3936496","3936496","toBeDocumented upload Payment File - add file no valid status",https://testrail.solera.com/index.php?/tests/view/3936496
+Reports,"T3936441","3936441","CP060_Global transfer report",https://testrail.solera.com/index.php?/tests/view/3936441
+Reports,"T3936442","3936442","CP061_Report of transfers by insurer",https://testrail.solera.com/index.php?/tests/view/3936442
+Reports,"T3936443","3936443","CP062_Report of transfers by provider",https://testrail.solera.com/index.php?/tests/view/3936443
+Reports,"T3936444","3936444","CP063_Report of transfers by branch",https://testrail.solera.com/index.php?/tests/view/3936444
+Reports,"T3936445","3936445","CP064_Report of transfers by city",https://testrail.solera.com/index.php?/tests/view/3936445
+Reports,"T3936446","3936446","CP065_Report of transfers by origin",https://testrail.solera.com/index.php?/tests/view/3936446
+Reports,"T3936447","3936447","CP066_Report of transfers by manufacturer",https://testrail.solera.com/index.php?/tests/view/3936447
+Reports,"T3936448","3936448","CP067_Report of transfers by type",https://testrail.solera.com/index.php?/tests/view/3936448
+Reports,"T3936449","3936449","CP068_Report of transfers by model",https://testrail.solera.com/index.php?/tests/view/3936449
+Reports,"T3936450","3936450","CP069_Report of transfers by type of unit",https://testrail.solera.com/index.php?/tests/view/3936450
+Reports,"T3936451","3936451","CP070_Report of transfers by dates",https://testrail.solera.com/index.php?/tests/view/3936451
+Inventory,"T3936452","3936452","CP071_Report of transfers by status",https://testrail.solera.com/index.php?/tests/view/3936452
+Reports,"T3936453","3936453","CP072_General Ticket Inventory Report",https://testrail.solera.com/index.php?/tests/view/3936453
+Reports,"T3936454","3936454","CP073_Advanced Inventory Report",https://testrail.solera.com/index.php?/tests/view/3936454
+Reports,"T3936455","3936455","CP074_Outgoing Inventory Report",https://testrail.solera.com/index.php?/tests/view/3936455
+Reports,"T3936456","3936456","CP075_Report of Vehicles to enter",https://testrail.solera.com/index.php?/tests/view/3936456
+Reports,"T3936457","3936457","CP093_Translation mechanism for resources served to users  (backend) files excel case report-Active status.",https://testrail.solera.com/index.php?/tests/view/3936457
+Reports,"T3936458","3936458","CP094_Translation mechanism for resources served to users  (backend) files excel results report-Closed status.",https://testrail.solera.com/index.php?/tests/view/3936458
+Reports,"T3936459","3936459","CP095_Translation mechanism for resources served to users  (backend) files excel adjudication report.",https://testrail.solera.com/index.php?/tests/view/3936459
+Reports,"T3936460","3936460","CP096_Translation mechanism for resources served to users  (backend) files excel input report",https://testrail.solera.com/index.php?/tests/view/3936460
+Reports,"T3936461","3936461","CP097_Translation mechanism for resources served to users  (backend) files excel departures report",https://testrail.solera.com/index.php?/tests/view/3936461
+Reports,"T3936462","3936462","CP098_Translation mechanism for resources served to users  (backend) files excel report of vehicles to enter",https://testrail.solera.com/index.php?/tests/view/3936462
+Reports,"T3936463","3936463","CP099_Translation mechanism for resources served to users  (backend) files excel transfer report",https://testrail.solera.com/index.php?/tests/view/3936463
+Reports,"T3936464","3936464","CP100_OfficeOpenXml change library case report",https://testrail.solera.com/index.php?/tests/view/3936464
+Reports,"T3936465","3936465","CP101_OfficeOpenXml change library results report",https://testrail.solera.com/index.php?/tests/view/3936465
+Reports,"T3936466","3936466","CP102_OfficeOpenXml change library adjudication report.",https://testrail.solera.com/index.php?/tests/view/3936466
+Reports,"T3936467","3936467","CP103_OfficeOpenXml change library input report",https://testrail.solera.com/index.php?/tests/view/3936467
+Reports,"T3936468","3936468","CP104_OfficeOpenXml change library departure report",https://testrail.solera.com/index.php?/tests/view/3936468
+Reports,"T3936469","3936469","CP105_OfficeOpenXml change library report of vehicles to enter",https://testrail.solera.com/index.php?/tests/view/3936469
+Reports,"T3936470","3936470","CP106_OfficeOpenXml change library transfer report",https://testrail.solera.com/index.php?/tests/view/3936470
+Reports > Cases,"T3936473","3936473","[Cases][Consult][Vehicle] Report",https://testrail.solera.com/index.php?/tests/view/3936473
+Reports > Cases,"T3936474","3936474","[Cases][Consult][Vehicle] Documents Report",https://testrail.solera.com/index.php?/tests/view/3936474
+Reports > Cases,"T3936480","3936480","[Cases][Consult][Various] Report",https://testrail.solera.com/index.php?/tests/view/3936480
+Reports > Publications,"T3936478","3936478","[Publication] [Detail] [Vehicle] Results Report",https://testrail.solera.com/index.php?/tests/view/3936478
+Reports > Publications,"T3936479","3936479","[Publication] [Detail] [Vehicle] Offers Report",https://testrail.solera.com/index.php?/tests/view/3936479
+Reports > Publications,"T3936484","3936484","[Publication][Detail][Vehicle] Views Report",https://testrail.solera.com/index.php?/tests/view/3936484
+Reports > Publications,"T3936486","3936486","[Publication] [Detail] [Various] Results Report",https://testrail.solera.com/index.php?/tests/view/3936486
+Reports > Publications,"T3936487","3936487","[Publication] [Detail] [Various] Offers Report",https://testrail.solera.com/index.php?/tests/view/3936487
+Reports > Publications,"T3936488","3936488","[Publication][Detail][Various] Views Report",https://testrail.solera.com/index.php?/tests/view/3936488
+Reports > Publications,"T3936491","3936491","TBDocumented[Publication][General][Vehicle] Sells Report",https://testrail.solera.com/index.php?/tests/view/3936491
+paymentFile,"T3936492","3936492","ToBeDocumented[Publication][General][Various] Sells Report",https://testrail.solera.com/index.php?/tests/view/3936492
+Reports > Payments,"T3936483","3936483","[Payments][Consult][Vehicle] Payment Report",https://testrail.solera.com/index.php?/tests/view/3936483
+Reports > Payments,"T3936489","3936489","[Payments][Consult][Various] Payment Report",https://testrail.solera.com/index.php?/tests/view/3936489
+Reports > Awards,"T3936485","3936485","[Awarding][Consult][Vehicle] Report",https://testrail.solera.com/index.php?/tests/view/3936485
+Reports > Awards,"T3936490","3936490","[Awarding][Consult][Various] Report",https://testrail.solera.com/index.php?/tests/view/3936490
+Documents,"T3936475","3936475","Attach document",https://testrail.solera.com/index.php?/tests/view/3936475
+Documents,"T3936476","3936476","View document",https://testrail.solera.com/index.php?/tests/view/3936476
+Documents,"T3936477","3936477","Download document",https://testrail.solera.com/index.php?/tests/view/3936477
