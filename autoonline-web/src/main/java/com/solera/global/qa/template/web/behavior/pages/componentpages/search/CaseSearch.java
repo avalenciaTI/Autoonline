@@ -52,6 +52,7 @@ public class CaseSearch extends BrowserPage {
         return getElement(By.xpath(criteriaResults)).isDisplayed();
     }
 
+
     public void advanceSearch(CaseType caseTypeVal){
         new CommonComponents().selectFromDropdownText(getElement(By.xpath(CASE_TYPE_FIELD)),caseTypeVal.getCaseType());
         WebElement searchStatusButton=getDriver().findElement(By.xpath(ADVANCE_SEARCH_CRITERIA+"//span"));

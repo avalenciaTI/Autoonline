@@ -6,6 +6,7 @@ import com.solera.global.qa.template.web.behavior.data.types.Case;
 import com.solera.global.qa.template.web.behavior.data.types.Sinister;
 import com.solera.global.qa.template.web.behavior.data.types.Vehicle;
 import com.solera.global.qa.template.web.behavior.data.types.Workshop;
+import com.solera.global.qa.template.web.behavior.pages.casecreation.transfercase.GenerationofTransfer;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CaseType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
@@ -62,7 +63,24 @@ public class IndividualRegistration extends BrowserPage {
     public static final String CASE_WORKSHOP_NUMBER_FIELD = "//input[contains(@id,'workshopNumber')]";
     public static final String CASE_WORKSHOP_NAME_FIELD = "//input[contains(@id,'workshopName')]";
     public static final String SPINNER = "//i[contains(@aria-label,'loading') and contains(@class,'loading')]";
-
+    //ASSIGN_TRANSFER
+    public static final String BTN_ASSIGN_TRANSFER = "//button[@type='button'][contains(.,'Asignar traslado')]";
+    public static final String CRANE_PROVIDER_FIELD =
+    "//div[contains(@id,'craneProviderId')] | //input[contains(@id,'providerBusinessName')]";
+    public static final String CRANE_BRANCH_FIELD =
+    "//div[contains(@id,'craneBranchId')] | //input[contains(@id,'branchName')]";
+    public static final String IMPOUNDMENT_PROVIDER_FIELD = "//div[contains(@id,'provider') or "
+    + "contains(@id,'carPoundId')]";
+    public static final String IMPOUNDMENT_BRANCH_FIELD = "//div[contains(@id,'branch')]";
+    public static final String LOCAL_TRANSFER_TYPE_BUTTON = "//input[@value='1']/parent::span";
+    public static final String COST_FIELD = "//input[contains(@id,'number') or contains(@id,'cost')]";
+    public static final String CHARGE_FIELD = "step-form_charge";
+    public static final String CALENDAR_FIELD = "//input[contains(@class,'ant-calendar-picker-input ant-input')]";
+    public static final String COMMENTS_FIELD =
+    "//textarea[@autocomplete='off'][contains(@id,'comments')]";
+    public static final String ADD_CONTACT = "//button[@type='button'][contains(.,'Agregar contacto')]";
+    public static final String CONTACT_NAME_FIELD = "//div[contains(@id,'contactName')] | //input[contains(@id,'contactName')]";
+    public static final String CONTACT_PHONE_FIELD = "//div[contains(@id,'contactPhone')] | //input[contains(@id,'contactPhone')]";
 
 
     @FindBy(xpath = CASE_TYPE_FIELD)
@@ -106,6 +124,37 @@ public class IndividualRegistration extends BrowserPage {
     WebElement workshopNumber;
     @FindBy(xpath = CASE_WORKSHOP_NAME_FIELD)
     WebElement workshopName;
+    //section assign transfer
+    @FindBy(xpath = BTN_ASSIGN_TRANSFER)
+    WebElement btnAssignTransfer;
+    @FindBy(xpath = CRANE_PROVIDER_FIELD)
+    WebElement craneProviderField;
+    @FindBy(xpath = CRANE_BRANCH_FIELD)
+    WebElement craneBranchField;
+    @FindBy(xpath = IMPOUNDMENT_PROVIDER_FIELD)
+    WebElement impoundmentProviderField;
+    @FindBy(xpath = IMPOUNDMENT_BRANCH_FIELD)
+    WebElement impoundmentBranchField;
+    @FindBy(xpath = LOCAL_TRANSFER_TYPE_BUTTON)
+    WebElement localTransferTypeButton;
+    @FindBy(xpath = COST_FIELD)
+    WebElement costField;
+    @FindBy(id = CHARGE_FIELD) 
+    WebElement chargeField;
+    @FindBy(xpath = ADD_CONTACT) 
+    WebElement addContact;
+    @FindBy(xpath = CONTACT_NAME_FIELD) 
+    WebElement contactNameField;
+    @FindBy(xpath = CONTACT_PHONE_FIELD) 
+    WebElement contactPhoneField;
+    @FindBy(xpath = CALENDAR_FIELD) 
+    WebElement calendarField;
+    @FindBy(xpath = COMMENTS_FIELD) 
+    WebElement commentsField;
+
+
+
+
 
     //Common Elements
     WebElement country = locationFields.getCountryField();
@@ -138,6 +187,8 @@ public class IndividualRegistration extends BrowserPage {
     private static final String DOM_STORED_VALUE = " VALUE STORED: ";
 
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
+    public static final String INPUT = "input";
+
     ///
 
     public IndividualRegistration() {
@@ -208,6 +259,101 @@ public class IndividualRegistration extends BrowserPage {
         return storedValues;
 
     }
+
+
+//tc87_caseTransfersGeneration
+public List<CompleteWebElement> fillVehicleCaseTypeGeneration(String vin, String numbersinister, Case caseData) {
+    log.info("In fillVehicleCaseTypeGeneration:");
+    WebElement caseTypeSel = getElement(By.xpath(CASE_TYPE_FIELD));
+    log.info("Case type selector found");
+    new CommonComponents().selectFromDropdownText(caseTypeSel,"Vehículos");
+    log.info("After select dropdown");
+    Vehicle vehicle = caseData.getVehicle();
+        storedValues = fillField(numberSinister, numbersinister, storedValues);
+        storedValues = fillField(report,vehicle.getFieldReport(), storedValues);
+        storedValues = fillField(insurancePolicy, vehicle.getPolicy(), storedValues);
+        storedValues = fillField(wreckType,vehicle.getWreckType(), storedValues);
+        storedValues = fillField(wreckSubType,vehicle.getWreckSubtype(), storedValues);
+        storedValues = fillField(brandVehicle,vehicle.getVehicleBrand(), storedValues);
+        storedValues = fillField(vehicleType,vehicle.getVehicleType(), storedValues);
+        storedValues = fillField(vehicleVersion,vehicle.getVehicleVersion(), storedValues);
+        storedValues = fillField(color,vehicle.getVehicleColor(), storedValues);
+        storedValues = fillField(modelYear,vehicle.getModelYear(), storedValues);
+        storedValues = fillField(policySerial,vehicle.getPolicySerial(), storedValues);
+        storedValues = fillField(this.vin,vin, storedValues);
+        storedValues = fillField(vehiclePlate,vehicle.getPlate(), storedValues);
+        storedValues = fillField(engineNumber,vehicle.getEngineNumber(), storedValues);
+        storedValues = fillField(engineType,vehicle.getEngineType(), storedValues);
+        storedValues = fillField(unitType,vehicle.getUnitType(), storedValues);
+
+        log().image("IndividualRegistration - Vehicle Case Creation 1", takeScreenshot());
+        new Buttons().clickContinueBtn();
+
+        Workshop workshop = caseData.getWorkshop();
+        storedValues = fillField(locationType,workshop.getLocation(), storedValues);
+        storedValues = fillField(workshopNumber,workshop.getWorkshopNumber(), storedValues);
+        storedValues = fillField(workshopName,workshop.getName(), storedValues);
+        storedValues = fillField(country,workshop.getCountry(), storedValues);
+        storedValues = fillField(state,workshop.getState(), storedValues);
+        storedValues = fillField(street, workshop.getStreet(), storedValues);
+        storedValues = fillField(exteriorNumber, workshop.getExternalNumber(), storedValues);
+        storedValues = fillField(interiorNumber, workshop.getInternalNumber(), storedValues);
+        storedValues = fillField(zipCode, workshop.getZipCode(), storedValues);
+        storedValues = fillField(neighborhoodField, workshop.getNeighborhood(), storedValues);
+        storedValues = fillField(town,workshop.getTown(), storedValues);
+        storedValues = fillField(city,"CDMX", storedValues);
+
+        log().image("IndividualRegistration - Vehicle Case Creation 2", takeScreenshot());
+        new Buttons().clickContinueBtn();
+
+        Sinister sinister = caseData.getSinister();
+        storedValues = fillField(insuranceSelected,sinister.getInsurer(), storedValues);
+        storedValues = fillField(compensationValue,sinister.getCompensationValue(), storedValues);
+        storedValues = fillField(commercialValue,sinister.getCommertialValue(), storedValues);
+        storedValues = fillField(baseValue,sinister.getBaseValue(), storedValues);
+        storedValues = fillField(sparePartsCost,sinister.getSpareCost(), storedValues);
+        storedValues = fillField(repairCost,sinister.getRepairCost(), storedValues);
+        storedValues = fillField(observations,sinister.getObservations(), storedValues);
+        storedValues = fillField(c1Field,sinister.getC1Field(), storedValues);
+        storedValues = fillField(c2Field,sinister.getC2Field(), storedValues);
+        storedValues = fillField(c3Field,sinister.getC3Field(), storedValues);
+
+        log().image("IndividualRegistration - Vehicle Case Creation 3", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.WAIT_FOR_NOTIFICATION);
+        log().image("Clicked accept button to initialize transfer and notificadion displayed", takeScreenshot());
+        log.info("Transfer initialized successfully");
+        waitForElementInvisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.NOTIFICATION_FADED);
+        log().image("Clicked accept button to initialize transfer and notificadion faded", takeScreenshot());
+    return storedValues;
+
+}
+
+
+//tc87_caseTransfersGeneration
+public List<CompleteWebElement> fillVehicleSectionAssign() {
+    log.info("In fillVehicleSectionAssign:");
+    new Buttons().clickContinueBtn();
+    click(addContact);
+    storedValues = fillField(contactNameField,"JORGE QA REGRESION",storedValues);
+    storedValues = fillField(contactPhoneField,"4425663456",storedValues);
+    new GenerationofTransfer().clickSaveAddContactButton();
+    new GenerationofTransfer().processCase();
+    new Buttons().clickContinueBtn();
+    new GenerationofTransfer().fillDestinationInformation();
+    waitForElementInvisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.NOTIFICATION_FADED);
+    log().image("Clicked accept button to initialize transfer and notificadion faded", takeScreenshot());
+    return storedValues;
+
+}
+
+
+
+
+
+
+
+
 
     public Integer validateCaseCreation(List<CompleteWebElement> completeWebElements) {
         log.info("In validateCaseCreation");
@@ -322,6 +468,15 @@ public class IndividualRegistration extends BrowserPage {
     }
 
 
+    private void fillField(WebElement webElement, String value) {
+        if (webElement.getTagName().contains(INPUT)) {
+            sendKeys(webElement,value);
+        } else if (webElement.getTagName().contains("div")) {
+            new CommonComponents().selectFromDropdownText(webElement,value);
+        }
+    }
+
+
 
     /////
     public boolean vehicleIndividualRegistration(String vin, Case caseData) {
@@ -399,5 +554,77 @@ public class IndividualRegistration extends BrowserPage {
 
         return true;
     }
+
+
+
+
+    public boolean caseGenerationTransfer(String vin, Case caseData) {
+        
+        MenuPage menuPage = new MenuPage();//menu managment.
+        RegistrationMenu casesMenu = menuPage.clickCases();
+        /*casesMenu.clickIndividualRegistrationCase();
+        IndividualRegistration vehicleRegistration = new IndividualRegistration();
+
+        IndividualRegistration IndividualRegistration = new IndividualRegistration();
+       // final List<CompleteWebElement> values2Validate = vehicleRegistration
+            //    .fillVehicleCaseTypeGeneration(vin,"TESTVEHAUTOAMTED"+ vin, caseData);
+        IndividualRegistration.fillVehicleCaseTypeGeneration(vin,"TESTVEHAUTOAMTED"+ vin, caseData); */
+        log.info("Case created, searching case");
+        sleep(5000);
+        menuPage.clickCases();
+        casesMenu.clickSearchCases("Vehículos",vin);
+
+        new CommonComponents().findHRefElement(new CommonComponents()
+                .dynamicWebElement(SEARCH_DYNAMIC, vin));
+
+        log.info("Searching case in results");
+        new GenerationofTransfer().processCase();
+       // click(btnAssignTransfer);
+        //final List<CompleteWebElement> values3Validate = vehicleRegistration
+       // .fillVehicleSectionAssign();
+    
+        //Integer results = vehicleRegistration.validateCaseCreation(values2Validate);
+       // Integer results2 = vehicleRegistration.validateCaseCreation(values3Validate);
+       // log().image(CLASS_NAME + " correct " + results, takeScreenshot());
+       // log().image(CLASS_NAME + " correct " + results2, takeScreenshot());
+
+        return true;
+    }
+
+
+
+    public boolean caseGenerationCompensation(String vin, Case caseData) {
+        
+        MenuPage menuPage = new MenuPage();//menu managment.
+        RegistrationMenu casesMenu = menuPage.clickCases();
+        /*casesMenu.clickIndividualRegistrationCase();
+        IndividualRegistration vehicleRegistration = new IndividualRegistration();
+
+        IndividualRegistration IndividualRegistration = new IndividualRegistration();
+       // final List<CompleteWebElement> values2Validate = vehicleRegistration
+            //    .fillVehicleCaseTypeGeneration(vin,"TESTVEHAUTOAMTED"+ vin, caseData);
+        IndividualRegistration.fillVehicleCaseTypeGeneration(vin,"TESTVEHAUTOAMTED"+ vin, caseData); */
+        log.info("Case created, searching case");
+        sleep(5000);
+        menuPage.clickCases();
+        casesMenu.clickSearchCases("Vehículos",vin);
+
+        new CommonComponents().findHRefElement(new CommonComponents()
+                .dynamicWebElement(SEARCH_DYNAMIC, vin));
+
+        log.info("Searching case in results");
+        new GenerationofTransfer().compensationCase();
+       // click(btnAssignTransfer);
+        //final List<CompleteWebElement> values3Validate = vehicleRegistration
+       // .fillVehicleSectionAssign();
+    
+        //Integer results = vehicleRegistration.validateCaseCreation(values2Validate);
+       // Integer results2 = vehicleRegistration.validateCaseCreation(values3Validate);
+       // log().image(CLASS_NAME + " correct " + results, takeScreenshot());
+       // log().image(CLASS_NAME + " correct " + results2, takeScreenshot());
+
+        return true;
+    }
+
 
 }

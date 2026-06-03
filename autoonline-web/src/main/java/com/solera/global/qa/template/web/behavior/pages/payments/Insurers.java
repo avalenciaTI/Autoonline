@@ -7,7 +7,7 @@ public enum Insurers {
     LFFS_INSURER("AASE191"),
     TEST_INSURER("AAPR011"),
     QA_REG_INSURER("AASR221"),
-    QA_TEST_AUTOMATION("AQAT223"),
+    QA_TEST_AUTOMATION("AQAT270"),
     ATLAS_INSURER("AATL001");
 
     private final String insurer;

@@ -9,9 +9,13 @@ import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonSea
 import com.solera.global.qa.template.web.behavior.pages.componentpages.SearchType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.TransferSearch;
 import com.solera.global.qa.template.web.behavior.pages.menupage.CraneMenuPage;
+import com.solera.global.qa.template.web.behavior.pages.menupage.MenuPage;
 import com.solera.global.qa.template.web.behavior.pages.payments.Insurers;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 @Slf4j
 public class TransfersPage extends BrowserPage {
@@ -32,15 +36,19 @@ public class TransfersPage extends BrowserPage {
             + "contains(text(), 'Fotografías de recolección de vehículo')]";
 
     public static final String TRANSFER_STATUS_SELECTOR = "destinationForm_transferStatus";
-    public static final String DRIVER_FIELD = "destinationForm_driver";
+    public static final String DRIVER_FIELD = "//input[contains(@id,'driver')]";
 
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
 
     public static final String LOAD_IMAGES = "//input[@type='file' and @accept='image/png,image/jpeg']/parent::button";
     //public static final String TRANSFER_STATUS_SELECTOR = "//input[@id='destinationForm_transferStatus']";
 
+    public static final String SEARCH_DYNAMIC = "//td[text()='?']";
 
 
+    public TransfersPage() {
+        super();
+    }
 
 
     public void updateTransfer() {
@@ -81,11 +89,19 @@ public class TransfersPage extends BrowserPage {
 
     public void confirmUpdate() {
         // page title Actualizar traslado
-        new Buttons().clickAcceptButton();
+        new Buttons().jsClickAcceptButton();
         log().image("Transfer is ready to be updated", takeScreenshot());
     }
 
     public void uploadImages() {
+        openVehicleRecollectionPhotosTab();
+
+        Photos photos = new Photos();
+        log().image("Before attaching images", takeScreenshot());
+        photos.attachImages(false);
+    }
+
+    public void openVehicleRecollectionPhotosTab() {
         waitForElementToBeClickable(getElement(By.xpath(CAMERA_BUTTON)), Timeouts.LOAD_BUTTON);
         click(getElement(By.xpath(CAMERA_BUTTON)));
         log().image("Clicked camera button", takeScreenshot());
@@ -93,10 +109,47 @@ public class TransfersPage extends BrowserPage {
         waitForElementToBeClickable(getElement(By.xpath(UPLOAD_VEHICLE_RECOLLECTION)), Timeouts.LOAD_BUTTON);
         click(getElement(By.xpath(UPLOAD_VEHICLE_RECOLLECTION)));
         log().image("Clicked upload vehicle recollection tab", takeScreenshot());
+    }
 
-        Photos photos = new Photos();
-        log().image("Before attaching images", takeScreenshot());
-        photos.attachImages(false);
+    public boolean isAttachInputAvailableAndEnabled() {
+        List<WebElement> attachInputs = getElements(By.xpath(LOAD_IMAGES));
+        if (attachInputs.isEmpty()) {
+            log.info("Attach input is not available, upload is blocked");
+            return false;
+        }
+        boolean enabled = attachInputs.get(0).isEnabled();
+        log.info("Attach input enabled status: {}", enabled);
+        return enabled;
+    }
+
+    public String getUploadRestrictionNotificationMessage() {
+        try {
+            waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.WAIT_FOR_NOTIFICATION);
+            String notification = getText(getElement(By.xpath(NOTIFICATION_MESSAGE)));
+            log.info("Upload restriction notification: {}", notification);
+            return notification;
+        } catch (Exception ex) {
+            log.info("No upload restriction notification found: {}", ex.getMessage());
+            return "";
+        }
+    }
+
+    public void openTransferUpdateAndImageInformation() {
+        waitForElementToBeClickable(getElement(By.xpath(UPDATE_BUTTON)), Timeouts.LOAD_BUTTON);
+        click(getElement(By.xpath(UPDATE_BUTTON)));
+        log().image("Clicked update button for transfer", takeScreenshot());
+        openVehicleRecollectionPhotosTab();
+    }
+
+    public boolean validateUploadBlockedAfterTimeLimit(String expectedMessage) {
+        openTransferUpdateAndImageInformation();
+        boolean attachEnabled = isAttachInputAvailableAndEnabled();
+        String notification = getUploadRestrictionNotificationMessage();
+        boolean messageMatches = expectedMessage != null
+                && !expectedMessage.isEmpty()
+                && notification != null
+                && notification.contains(expectedMessage);
+        return !attachEnabled || messageMatches;
     }
 
     public boolean verifyLoadedImages() {
@@ -134,8 +187,8 @@ public class TransfersPage extends BrowserPage {
 
         //todo add wait for an element in destination info tab
         setTransferState("En tránsito");
-        sendKeys(getElement(By.id(DRIVER_FIELD)), "QA DRIVER");
-        buttons.clickAcceptButton();
+        sendKeys(getElement(By.xpath(DRIVER_FIELD)), "QA DRIVER");
+        buttons.jsClickAcceptButton();
         waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.WAIT_FOR_NOTIFICATION);
         log().image("Clicked accept button to initialize transfer and notificadion displayed", takeScreenshot());
         log.info("Transfer initialized successfully");
@@ -158,6 +211,23 @@ public class TransfersPage extends BrowserPage {
         return vin.equals(openedVin);
 
 
+    }
+
+
+
+    public boolean generalSearchTranfer(String vin, String caseN) {
+        
+        MenuPage menuPage = new MenuPage();//menu managment.
+        TransferSearch casesMenu = new TransferSearch();
+        log.info("searching case");
+        menuPage.clickTransfers();
+        sleep(5000);
+        casesMenu.clickSearchTranfer(vin);
+        log.info("Searching case in results");
+        log().image("Results", takeScreenshot());
+        String criteriaResults = SEARCH_DYNAMIC.replace("?", caseN);
+        log.info("ending clickSearchCases..");
+        return getElement(By.xpath(criteriaResults)).isDisplayed();
     }
 
 

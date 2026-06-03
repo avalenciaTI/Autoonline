@@ -20,14 +20,14 @@ import org.openqa.selenium.support.FindBy;
 
 public class Photos extends BrowserPage {
     public static final String PHOTOS_BUTTON = "//i[@class='anticon anticon-camera']/parent::button";
-    public static final String ATTACH_BUTTON = "//input[@type='file']";//- //input[@type='file'] - //span[contains(.,'Adjuntar')]
+    public static final String ATTACH_BUTTON = "//input[@accept='image/png,image/jpeg']";//- //input[@type='file'] - //span[contains(.,'Adjuntar')]
     public static final String PAPER_CLIP = "//i[@aria-label='ícono: paper-clip']";
     public static final String FAVORITE_BUTTONS
             = "//div[@class='ant-tabs-tabpane ant-tabs-tabpane-active']"
             + "//div//img/parent::div/following-sibling::ul//i[@class='anticon anticon-star']";
     public static final String ACTIVE_WINDOW = "//div[contains(@aria-hidden,'false')]";
     public static final String IMAGES_LOADED = ACTIVE_WINDOW + "//div[@class='simage-container']/img";
-    public static final String IMAGES_SKELETON = ACTIVE_WINDOW + "//Figure[contains(@class,'skeleton')]";
+    public static final String IMAGES_SKELETON = ACTIVE_WINDOW + "//figure[contains(@class,'card-image-skeleton loading-skeleton')]";
     public static final String DYNAMIC_INDEX = "//ul[contains(@class,'pagination')]/li[@title=%s]";
     public static final String MARK_ALL_AS_FAVORITES = "(//input[contains(@class,'checkbox')])[1]";
     public static final String CLOSE_IMGS_BUTTON = "//button[@class='ant-modal-close' and @aria-label='Close']";
@@ -116,7 +116,7 @@ public class Photos extends BrowserPage {
             clickPaginationIndex(indexString, i);
 
             log.info("clicked index {}", i);
-            waitForElementInvisibility(getElement(By.xpath(IMAGES_SKELETON)), Timeouts.IMAGE_SKELETON_FADE);
+            waitForElementInvisibility(By.xpath(IMAGES_SKELETON), Timeouts.IMAGE_SKELETON_FADE);
             if (i == totalIndex) {
                 sleep(4000);
             }

@@ -9,9 +9,9 @@ import org.openqa.selenium.support.FindBy;
 @Slf4j
 public class PublicationConsult extends BrowserPage {
 
-    private static final String PUBLICATIONS_MENU = "(//div[@class='ant-menu-submenu-title'])[4]";
+    private static final String PUBLICATIONS_MENU = "//span[text()='Publicaciones']";
     public static final String INSURANCE_COST_FIELD = "//input[contains(@id,'insuranceCost')]";
-    private static final String CONSULT_SUBMENU = "//span[@title='Buscar compradores' and text()='Consultar']";
+    private static final String CONSULT_SUBMENU = "//span[@title='Buscar compradores' and (text()='Consultar' or text()='Vista')]";
     private static final String ONLINE_CONSULT_OPTION = "//span[@title='Buscar compradores' and text()='En línea']";
     private static final String ARCHIVED_CONSULT_OPTION = "//span[@title='Buscar compradores' and text()='Archivadas']";
     private static final String ONLINE_VEHICLE_OPTION = "//a[@href='/adverts/list/online/vehicle' and text()='Vehiculos']";

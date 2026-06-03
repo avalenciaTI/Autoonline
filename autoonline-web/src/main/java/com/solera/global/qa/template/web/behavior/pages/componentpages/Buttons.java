@@ -15,6 +15,7 @@ public class Buttons extends BrowserPage {
 
     private static final String APPROVAL_BUTTON = "//span[text()='Aprobar']/parent::button[@type='button']";
     private static final String ACTIVATE_BUTTON = "//span[text()='Activar']/parent::button[@type='button']";
+    //private static final String CLOSE_BUTTON = "//span[@class='ant-modal-close-x']";
     private static final String CLOSE_BUTTON = "//button[@type='button' and @aria-label='Close']";
     private static final String RESTART_BUTTON
             = "//button[@type='submit' and (span[text()='Buscar'] or span[text()='Enviar'])]";
@@ -31,7 +32,8 @@ public class Buttons extends BrowserPage {
     private static final String BUSCAR_BUTTON = "//button[span[text()='Buscar']]";
     private static final String ADD_IMAGE = "//button[@id='test-image-uploader-modal']";
     private static final String SEND_BUTTON = "//span[text()='Enviar']/parent::button[@type='submit']";
-    
+    private static final String COMPENSATION_BUTTON = "//span[text()='Indemnización']"
+            + "/parent::button[@type='button']";
     
 
 
@@ -66,6 +68,8 @@ public class Buttons extends BrowserPage {
     WebElement acceptButton_SecondBuyer;
     @FindBy(xpath = SEND_BUTTON)
     WebElement sendButton;
+    @FindBy(xpath =  COMPENSATION_BUTTON)
+    WebElement compensationButton;
     
     
 
@@ -183,6 +187,13 @@ public class Buttons extends BrowserPage {
     public void clickAssignTransferButton() {
         waitForElementToBeClickable(assignTransferButton, 10000);
         click(assignTransferButton);
+    }
+
+
+
+    public void clickCompensationButton() {
+        waitForElementToBeClickable(compensationButton, 10000);
+        click(compensationButton);
     }
 
     public void clickAdjudicateBtn() {

@@ -19,8 +19,10 @@ import com.solera.global.qa.template.web.behavior.pages.casecreation.Registratio
 import com.solera.global.qa.template.web.behavior.pages.casecreation.transfercase.GenerationofTransfer;
 import com.solera.global.qa.template.web.behavior.pages.casecreation.transfercase.TransferIndividualRegistration;
 import com.solera.global.qa.template.web.behavior.pages.casecreation.transfercase.TransfersPage;
+import com.solera.global.qa.template.web.behavior.pages.inventory.*;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.search.CaseSearch;
+import com.solera.global.qa.template.web.behavior.pages.inventory.InventoryPage;
 import com.solera.global.qa.template.web.behavior.pages.loginpage.LogInPage;
 import com.solera.global.qa.template.web.behavior.pages.loginpage.LogOffPage;
 import com.solera.global.qa.template.web.behavior.pages.menupage.MenuPage;
@@ -33,8 +35,8 @@ import com.solera.global.qa.template.web.behavior.pages.reports.payments.Reports
 import com.solera.global.qa.template.web.behavior.pages.reports.publications.ReportsPublications;
 import com.solera.global.qa.template.web.behavior.pages.usercreation.individualregistration.AdministratorMasterInter;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
@@ -58,6 +60,7 @@ public class WebTestBase extends TestBase {
     protected LogInPage loginPage;
     protected LogOffPage logOffPage;
     protected TransfersPage transfersPage;
+    protected InventoryPage inventoryPage;
     protected Case caseData;
     protected static final String DEFAULT_USER = "default";
     protected static final String DEFAULT_VEHICLE = "vehicle";
@@ -127,20 +130,24 @@ public class WebTestBase extends TestBase {
         loginPage = new LogInPage();
         logOffPage = new LogOffPage();
         transfersPage = new TransfersPage();
+        inventoryPage = new InventoryPage();
     }
 
     public Browser startBrowser(boolean isIncognitMode) {
         String downloadDir = CommonComponents.getDownloadDir();
+        ensureDownloadDirectoryExists(downloadDir);
 
         HashMap<String, Object> prefs = new HashMap<>();
         prefs.put("intl.accept_languages", "es-MX");
         prefs.put("safebrowsing.enabled", true);                                    // enable safe browsing
         prefs.put("safebrowsing.disable_download_protection", true);                // disable download protection
         prefs.put("download.prompt_for_download", false);                           // disable download prompt
-
         prefs.put("download.default_directory", downloadDir);                       //set download directory
+        prefs.put("download.directory_upgrade", true);                              // keep selected directory
+        prefs.put("download.restrictions", 0);                                      // allow all downloads
         prefs.put("profile.default_content_settings.popups", 0);                    //disable popups
         prefs.put("profile.default_content_setting_values.automatic_downloads", 1); //allow automatic downloads
+        prefs.put("plugins.always_open_pdf_externally", true);                      // avoid opening files in browser
 
         log.info("BrowserName {}", TafConfig.Web.BROWSER_NAME.getValue());
         if (TafConfig.Web.BROWSER_NAME.getValue().equalsIgnoreCase("edge")) {
@@ -331,6 +338,9 @@ public class WebTestBase extends TestBase {
         return new IndividualRegistration();
     }
 
+    public TransfersPage generalSearchTranfer() {
+        return new TransfersPage();
+    }
     public Photos photos() {
         return new Photos();
     }
@@ -357,6 +367,21 @@ public class WebTestBase extends TestBase {
 
     public GenerationofTransfer generationofTransfer() {
         return new GenerationofTransfer();
+    }
+
+
+
+    public InventoryPage caseInventoryPage() {
+        return new InventoryPage();
+    }
+
+    private void ensureDownloadDirectoryExists(String downloadDir) {
+        try {
+            Files.createDirectories(Paths.get(downloadDir));
+            log.info("Download directory ready: {}", downloadDir);
+        } catch (Exception e) {
+            log.warn("Could not create download directory '{}': {}", downloadDir, e.getMessage());
+        }
     }
 
     public void closeBrowser() {

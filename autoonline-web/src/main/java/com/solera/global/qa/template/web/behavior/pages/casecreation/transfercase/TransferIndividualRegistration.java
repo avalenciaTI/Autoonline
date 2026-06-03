@@ -9,6 +9,9 @@ import org.openqa.selenium.support.FindBy;
 
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
+import com.solera.global.qa.template.web.behavior.data.types.Sinister;
+import com.solera.global.qa.template.web.behavior.data.types.Vehicle;
+import com.solera.global.qa.template.web.behavior.data.types.Workshop;
 import com.solera.global.qa.template.web.behavior.pages.casecreation.RegistrationMenu;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
@@ -118,11 +121,11 @@ public class TransferIndividualRegistration extends BrowserPage {
     //MARKET CATALOG
     public static final String CATALOG_TYPE_FIELD = "//div[contains(@id,'typeCatalog')]";
     public static final String BUSINESS_NAME_FIELD = "//input[contains(@id,'businessName')]";
-    public static final String MARKETS_NAME_FIELD = "//input[contains(@id,'add-catalog-markets_name')]";
-    public static final String MARKET_RFC_FIELD = "//input[contains(@id,'add-catalog-markets_taxId')]";
-    public static final String MARKET_COUNTRY_FIELD = 
+    public static final String CATALOG_NAME_FIELD = "//input[contains(@id,'name')]";
+    public static final String CATALOG_RFC_FIELD = "//input[contains(@id,'taxId')]";
+    public static final String CATALOG_COUNTRY_FIELD = 
     "//div[contains(@id,'countryId')] | //input[contains(@id,'countryId')]";
-    public static final String MARKET_STATE_FIELD = 
+    public static final String CATALOG_STATE_FIELD = 
     "//div[contains(@id,'stateId')] | //input[contains(@id,'stateId')]";
     public static final String ROAD_NAME_FIELD = "//input[contains(@id,'roadName')]";
     public static final String OUT_NUMER_FIELD = "//input[contains(@id,'outNumber')]";
@@ -132,6 +135,9 @@ public class TransferIndividualRegistration extends BrowserPage {
     public static final String TOWN_CATALOG_FIELD = "//input[contains(@id,'town')]";
     public static final String CITY_CATALOG_FIELD = "//input[contains(@id,'city')]";
     public static final String SERVICE_CATALOG_FIELD = "//input[contains(@class,'ant-checkbox-input')]";
+    public static final String SERVICE_CATALOG_OPTION_FIELD =
+            "//label[contains(@class,'ant-checkbox-wrapper')][.//span[normalize-space(text())='?']]"
+                    + "//input[contains(@class,'ant-checkbox-input')]";
     public static final String PREFIX_CATALOG_FIELD = "//input[contains(@id,'prefix')]";
     public static final String COST_CATALOG_FIELD = "//input[contains(@id,'managingCostDiverse')]";
     public static final String CARRIER_COST_CATALOG_FIELD = "//input[contains(@id,'carrierCostDiverse')]";
@@ -142,11 +148,15 @@ public class TransferIndividualRegistration extends BrowserPage {
     public static final String PERCENTAGE_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'percentageDiverse')]";
     public static final String LIMIT_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'limitDiverse')]";
     public static final String AMOUNT_DIVERSE_CATALOG_FIELD = "//input[contains(@id,'amountDiverse')]";
-
-
-
-
-
+    //SUPPLIER CATALOG
+    public static final String GIVEN_NAME_CATALOG_FIELD = "//input[contains(@id,'givenName')]";
+    public static final String SURNAME_CATALOG_FIELD = "//input[contains(@id,'surname')]";
+    public static final String LASTNAME_CATALOG_FIELD = "//input[contains(@id,'lastname')]";
+    public static final String PHONE_NUMBER_CATALOG_FIELD = "//input[contains(@id,'phoneNumber')]";
+    public static final String EMAIL_CATALOG_FIELD = "//input[contains(@id,'email')]";
+    //SUPPLIER BRANCH CATALOG
+    public static final String PROVIDER_ID_TYPE_FIELD = 
+    "//div[contains(@id,'providerId')] | //input[contains(@id,'providerId')]";
 
 
     @FindBy(xpath = CASE_TYPE_FIELD)
@@ -272,17 +282,17 @@ public class TransferIndividualRegistration extends BrowserPage {
     @FindBy(xpath = UPDATE_BUTTON)
     WebElement updateButton;
 
-    //Catalog
+    //CATALOG MARKET
     @FindBy(xpath = BUSINESS_NAME_FIELD)
     WebElement businessNameField;
-    @FindBy(xpath = MARKETS_NAME_FIELD)
-    WebElement marketsNameField;
-    @FindBy(xpath = MARKET_RFC_FIELD)
-    WebElement marketRfcField;
-    @FindBy(xpath = MARKET_COUNTRY_FIELD)
-    WebElement marketCountryField;
-    @FindBy(xpath = MARKET_STATE_FIELD)
-    WebElement marketStateField;
+    @FindBy(xpath = CATALOG_NAME_FIELD)
+    WebElement catalogNameField;
+    @FindBy(xpath = CATALOG_RFC_FIELD)
+    WebElement catalogRfcField;
+    @FindBy(xpath = CATALOG_COUNTRY_FIELD)
+    WebElement catalogCountryField;
+    @FindBy(xpath = CATALOG_STATE_FIELD)
+    WebElement catalogStateField;
     @FindBy(xpath = ROAD_NAME_FIELD)
     WebElement roadNameField;
     @FindBy(xpath = OUT_NUMER_FIELD)
@@ -321,6 +331,21 @@ public class TransferIndividualRegistration extends BrowserPage {
     WebElement amountDiverseCatalogField;
     @FindBy(xpath = CATALOG_TYPE_FIELD)
     WebElement catalogTypeField;
+    //CATALOG SUPPLIER
+    @FindBy(xpath = GIVEN_NAME_CATALOG_FIELD)
+    WebElement givenNameCatalogField;
+    @FindBy(xpath = SURNAME_CATALOG_FIELD)
+    WebElement surnameCatalogField;
+    @FindBy(xpath = LASTNAME_CATALOG_FIELD)
+    WebElement lastNameCatalogField;
+    @FindBy(xpath = PHONE_NUMBER_CATALOG_FIELD)
+    WebElement phoneNumberCatalogField;
+    @FindBy(xpath = EMAIL_CATALOG_FIELD)
+    WebElement emailCatalogField;
+    //CATALOG SUPPLIER BRANCH
+    @FindBy(xpath = PROVIDER_ID_TYPE_FIELD)
+    WebElement providerIdField;
+
 
     ///
     public static final String SEARCH_DYNAMIC = "//td[text()='?']";
@@ -488,10 +513,10 @@ public class TransferIndividualRegistration extends BrowserPage {
 
         storedValues = fillField(businessNameField, AdministratorMasterInter.generateDynamicName(), storedValues);
 
-        storedValues = fillField(marketsNameField, "ANA COMPAÑIA DE SEGUROS, S.A. DE C.V.", storedValues);
-        storedValues = fillField(marketRfcField, "OZQY880822EU6", storedValues);
-        storedValues = fillField(marketCountryField, "Mexico", storedValues);
-        storedValues = fillField(marketStateField, "QUERETARO", storedValues);
+        storedValues = fillField(catalogNameField, "ANA COMPAÑIA DE SEGUROS, S.A. DE C.V.", storedValues);
+        storedValues = fillField(catalogRfcField, "JPZE150311MR5", storedValues);
+        storedValues = fillField(catalogCountryField, "Mexico", storedValues);
+        storedValues = fillField(catalogStateField, "QUERETARO", storedValues);
         storedValues = fillField(roadNameField, "Nicolas campa", storedValues);
         storedValues = fillField(outNumerField, "12", storedValues);
         storedValues = fillField(inNumerField, "2", storedValues);
@@ -500,10 +525,8 @@ public class TransferIndividualRegistration extends BrowserPage {
         storedValues = fillField(townCatalogField, "Santiado de Queretaro", storedValues);
         storedValues = fillField(cityCatalogField, "Queretaro", storedValues);
         storedValues = fillField(prefixCatalogField, AdministratorMasterInter.generateDynamicPrefix(), storedValues);
-
+        clickServiceCatalogOptions("Diversos");
         log().image("Middle fulled catalog", takeScreenshot());
-        click(serviceCatalogField);
-
         storedValues = fillField(costCatalogField, "10000", storedValues);
         storedValues = fillField(carrierCostCatalogField, "2000", storedValues);
         storedValues = fillField(bankAccountCatalogField, "889778978978", storedValues);
@@ -513,18 +536,83 @@ public class TransferIndividualRegistration extends BrowserPage {
         storedValues = fillField(percentageDiverseCatalogField, "15", storedValues);
         storedValues = fillField(limitDiverseCatalogField, "0", storedValues);
         storedValues = fillField(amountDiverseCatalogField, "100", storedValues);
+
         log().image("fill fulled catalog", takeScreenshot());
-        sleep(5000);
-
         new Buttons().jsClickAcceptButton();
-        sleep(2000);
         waitForElementPresence(notificationWindow.findElement(By.xpath(NOTIFICATION_MESSAGE)),Timeouts.NOTIFICATION_DISPLAYED);
-
-
         return storedValues;
     }
 
 
+
+
+
+    //Field list catalog supplier
+    public List<CompleteWebElement> fillCatalogSupplier(String vin, String businnesN) {
+        log.info("In fillCatalogSupplier:");
+        log.info("Catalog type selector found");
+        new CommonComponents().selectFromGlobalAntDropdownOption(catalogTypeField, "Proveedor");
+
+        storedValues = fillField(businessNameField, AdministratorMasterInter.generateDynamicName(), storedValues);
+
+        storedValues = fillField(catalogNameField, "ANONIMO COMPAÑIA DE SEGUROS, S.A. DE C.V.", storedValues);
+        storedValues = fillField(catalogRfcField, "JYQH750215JE5", storedValues);
+        storedValues = fillField(catalogCountryField, "Mexico", storedValues);
+        storedValues = fillField(catalogStateField, "QUERETARO", storedValues);
+        storedValues = fillField(roadNameField, "Nicolas campa", storedValues);
+        storedValues = fillField(outNumerField, "12", storedValues);
+        storedValues = fillField(inNumerField, "2", storedValues);
+        storedValues = fillField(zipCodeCatalogField, "76116", storedValues);
+        storedValues = fillField(neighborhoodCatalogField, "Centro", storedValues);
+        storedValues = fillField(townCatalogField, "Santiado de Queretaro", storedValues);
+        storedValues = fillField(cityCatalogField, "Queretaro", storedValues);
+        storedValues = fillField(prefixCatalogField, AdministratorMasterInter.generateDynamicPrefix(), storedValues);
+        clickServiceCatalogOptions("Corralón", "Gestoría", "Grúa");
+        log().image("Middle fulled catalog", takeScreenshot());
+        new Buttons().clickContinueBtn();
+        storedValues = fillField(givenNameCatalogField, "Jose Juan", storedValues);
+        storedValues = fillField(surnameCatalogField, "ramon", storedValues);
+        storedValues = fillField(lastNameCatalogField, "valdes", storedValues);
+        storedValues = fillField(phoneNumberCatalogField, "4426773355", storedValues);
+        storedValues = fillField(emailCatalogField, "provedorau@yopmail.com", storedValues);
+        log().image("fill fulled catalog", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        waitForElementPresence(notificationWindow.findElement(By.xpath(NOTIFICATION_MESSAGE)),Timeouts.NOTIFICATION_DISPLAYED);
+        return storedValues;
+    }
+
+
+
+    //Field list catalog supplier branch
+    public List<CompleteWebElement> fillCatalogSupplierBranch(String vin, String businnesN) {
+        log.info("In fillCatalogSupplierBranch:");
+        log.info("Catalog type selector found");
+        new CommonComponents().selectFromGlobalAntDropdownOption(catalogTypeField, "Sucursal de proveedor");
+        new CommonComponents().selectFromGlobalAntDropdownOption(providerIdField, "AUTOMATIZACION 21HAOAL1");
+        storedValues = fillField(businessNameField, AdministratorMasterInter.generateDynamicName(), storedValues);
+        storedValues = fillField(catalogCountryField, "Mexico", storedValues);
+        storedValues = fillField(catalogStateField, "QUERETARO", storedValues);
+        storedValues = fillField(roadNameField, "Nicolas campa", storedValues);
+        storedValues = fillField(outNumerField, "12", storedValues);
+        storedValues = fillField(inNumerField, "2", storedValues);
+        storedValues = fillField(zipCodeCatalogField, "76116", storedValues);
+        storedValues = fillField(neighborhoodCatalogField, "Centro", storedValues);
+        storedValues = fillField(townCatalogField, "Santiado de Queretaro", storedValues);
+        storedValues = fillField(cityCatalogField, "Queretaro", storedValues);
+        storedValues = fillField(prefixCatalogField, AdministratorMasterInter.generateDynamicPrefix(), storedValues);
+        clickServiceCatalogOptions("Corralón", "Grúa");
+        log().image("Middle fulled catalog", takeScreenshot());
+        new Buttons().clickContinueBtn();
+        storedValues = fillField(givenNameCatalogField, "Jose Juan", storedValues);
+        storedValues = fillField(surnameCatalogField, "ramon", storedValues);
+        storedValues = fillField(lastNameCatalogField, "valdes", storedValues);
+        storedValues = fillField(phoneNumberCatalogField, "4426773355", storedValues);
+        storedValues = fillField(emailCatalogField, "provedorau@yopmail.com", storedValues);
+        log().image("fill fulled catalog", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        waitForElementPresence(notificationWindow.findElement(By.xpath(NOTIFICATION_MESSAGE)),Timeouts.NOTIFICATION_DISPLAYED);
+        return storedValues;
+    }
 
 
 
@@ -533,6 +621,14 @@ public class TransferIndividualRegistration extends BrowserPage {
             sendKeys(webElement,value);
         } else if (webElement.getTagName().contains("div")) {
             new CommonComponents().selectFromDropdownText(webElement,value);
+        }
+    }
+
+    private void clickServiceCatalogOptions(String... serviceNames) {
+        CommonComponents commonComponents = new CommonComponents();
+        for (String serviceName : serviceNames) {
+            WebElement serviceOption = commonComponents.dynamicWebElement(SERVICE_CATALOG_OPTION_FIELD, serviceName);
+            click(serviceOption);
         }
     }
 
@@ -642,5 +738,31 @@ public class TransferIndividualRegistration extends BrowserPage {
         return true;
 
     }
+
+
+
+    public boolean supplierRegistrationCatalog(String vin) {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCatalogs();
+        casesMenu.clickRegisterCatalog();
+        TransferIndividualRegistration transferIndividualRegistration = new TransferIndividualRegistration();
+        transferIndividualRegistration.fillCatalogSupplier(vin, "TESTTRANSFERAUTOAMTED");
+        return true;
+
+    }
+
+    public boolean supplierBranchRegistrationCatalog(String vin) {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCatalogs();
+        casesMenu.clickRegisterCatalog();
+        TransferIndividualRegistration transferIndividualRegistration = new TransferIndividualRegistration();
+        transferIndividualRegistration.fillCatalogSupplierBranch(vin, "TESTTRANSFERAUTOAMTED");
+        return true;
+
+    }
+
+
+
+    
 
 }

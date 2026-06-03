@@ -1,6 +1,7 @@
 package com.solera.global.qa.template.web.behavior.pages.casecreation;
 
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
+import com.solera.global.qa.template.web.behavior.data.AolWebPropertiesReader;
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.data.types.AolWebUser;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
@@ -8,6 +9,7 @@ import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonCom
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonSinisterField;
 import com.solera.global.qa.template.web.behavior.pages.loginpage.LogInPage;
 import com.solera.global.qa.template.web.behavior.pages.menupage.MenuPage;
+import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -25,14 +27,16 @@ public class Documents extends BrowserPage {
             = "//span[text()='Aprobar todo']/parent::button[@type='submit']";
     // ensure which of both paper_clip_button must remains
     //public static final String PAPER_CLIP_BUTTON = "//i[@aria-label='ícono: paper-clip']/parent::button/input"
-    public static final String PAPER_CLIP_BUTTON = "//input[@type='file']";
+    public static final String PAPER_CLIP_BUTTON = "//input[contains(@accept,'image/png,image/jpeg,application/pdf')]";
     public static final String CONTINUE_BUTTON = "//button[@type='submit' and contains(@form,'')]";
     public static final String CASE_STATUS_FIELD = "//input[contains(@id,'caseStatus')]";
 
     public static final String SECTION_LOCATOR_TEMP =
             "//h5[text()='?']/parent::div/parent::div[contains(@class,'input-documents')]";
-    public static final String ATTACH_DOCUMENTS_BUTTON =
-            "//h5[text()='?']/parent::div//parent::div[contains(@class,'input-documents')]"
+    public static final String ATTACH_DOCUMENTS_CORRALON_BUTTON = "//button[contains(@jest-id,'fileUploader')]";
+    
+     static final String ATTACH_DOCUMENTS_BUTTON =
+            "//s[text()='?']/parent::div//parent::div[contains(@class,'input-documents')]"
                     + "//i[@class='anticon anticon-plus']/parent::button";
     public static final String DOCUMENTS_COMMENTS =
             "//h5[text()='?']/parent::div//parent::div[contains(@class,'input-documents')]"
@@ -46,6 +50,8 @@ public class Documents extends BrowserPage {
     private static final String REPORT_BUTTON = "//button[@jest-id='reportButton']";
     @FindBy(xpath = ATTACH_VEHICLE_DOCUMENTS_BUTTON)
     WebElement attachVehicleDocuments;
+    @FindBy(xpath = ATTACH_DOCUMENTS_CORRALON_BUTTON)
+    WebElement attachDocumentsCorralon;
     @FindBy(xpath = PAPER_CLIP_BUTTON)
     WebElement paperClipButton;
     @FindBy(xpath = CONTINUE_BUTTON)
@@ -72,7 +78,7 @@ public class Documents extends BrowserPage {
         super();
     }
 
-    private void attachFile(DocumentTypeVehicleESP docType) {
+    public void attachFile(DocumentTypeVehicleESP docType) {
         WebElement element = new CommonComponents()
                 .dynamicWebElement(ATTACH_DOCUMENTS_BUTTON, docType.getDocumentTypeVehicle());
         waitForElementToBeClickable(element, Timeouts.LOAD_PAGE);
@@ -110,6 +116,46 @@ public class Documents extends BrowserPage {
                 .dynamicWebElement(DOCUMENTS_COMMENTS,docType.getDocumentTypeVehicle());
         click(element);
         sendKeys(element,docType.getComment());
+    }
+
+    public void attachFilesFromFolder() {
+        click(attachDocumentsCorralon);
+        waitForElementPresence(By.xpath(PAPER_CLIP_BUTTON), Timeouts.LOAD_ELEMENT);
+        String pdfFolder = "pdfImages/";
+        String attachmentsFolder = AolWebPropertiesReader.getAttachmentsFolder(pdfFolder);
+        log.info("ATTACHMENTS FOLDER: {}", attachmentsFolder);
+
+        File folder = new File(attachmentsFolder);
+        File[] files = folder.listFiles();
+        int numFiles = files.length;
+        log.info("ATTACH FILES FROM FOLDER, files in folder: {}", numFiles);
+        StringBuilder files2Send = new StringBuilder();
+        String basePath = folder.getAbsolutePath() + File.separator;
+
+        for (int i = 0; i < numFiles; i++) {
+            String filePath = basePath + files[i].getName();
+            log.info("FILE PATH: {}", filePath);
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                log.info("FILE EXISTS: {}", filePath);
+            }
+            files2Send.append(filePath);
+            if (i < numFiles - 1) {
+                files2Send.append("\n");
+            }
+        }
+
+        log.info("TotalFiles: {}", files2Send.toString());
+        log.info("Sending files to hidden file input");
+        waitForElementPresence(By.xpath(PAPER_CLIP_BUTTON), Timeouts.LOAD_ELEMENT);
+        sleep(500);
+        getElement(By.xpath(PAPER_CLIP_BUTTON)).sendKeys(files2Send.toString());
+        log.info("File uploaded");
+
+        sleep(500);
+        new CommonComponents().getElementWithRetry(DELETE_IMAGE_BTN);
+        //new Buttons().clickCloseBtn();
     }
 
     public void loadAllFiles() {

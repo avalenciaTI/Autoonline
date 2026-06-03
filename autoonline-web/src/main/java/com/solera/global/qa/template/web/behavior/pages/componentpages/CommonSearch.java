@@ -4,6 +4,8 @@ import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.ICaseType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.WorkFlowElements;
 import com.solera.global.qa.template.web.behavior.pages.payments.Insurers;
+import com.solera.global.qa.template.web.behavior.pages.payments.Supplier;
+
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -30,6 +32,10 @@ public class CommonSearch extends BrowserPage {
 
     public static final String INSURANCE_COMPANY_SELECTOR =
             "//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
+    
+
+    public static final String SUPPLIER_COMPANY_SELECTOR =
+            "//div[contains(@id,'suppliers')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
 
     private static final String START_DATE_ELEMENT = "//span[contains(@id,'start')]";
     //caseType      -   case        - search-cases_startDate
@@ -98,6 +104,14 @@ public class CommonSearch extends BrowserPage {
         String insurerLocator = INSURANCE_COMPANY_SELECTOR.replace("?", insurer.getInsurer());
         WebElement insurerElement = getBrowser().getDriver().findElement(By.xpath(insurerLocator));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", insurerElement);
+        log().image("Insurer selected", takeScreenshot());
+    }
+
+
+    public void selectSupplier(Supplier supplier) {
+        String supplierLocator = SUPPLIER_COMPANY_SELECTOR.replace("?", supplier.getSupplier());
+        WebElement supplierElement = getBrowser().getDriver().findElement(By.xpath(supplierLocator));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", supplierElement);
         log().image("Insurer selected", takeScreenshot());
     }
 

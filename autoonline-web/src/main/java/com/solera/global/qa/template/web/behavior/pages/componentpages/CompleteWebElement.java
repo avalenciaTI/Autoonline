@@ -40,4 +40,12 @@ public class CompleteWebElement {
     public CompleteWebElement(WebElement webElement) {
         this.webElement = webElement;
     }
+
+    public CompleteWebElement(WebElement insureCarrierNameField, String string, int i) {
+        //TODO Auto-generated constructor stub
+    }
+
+    public CompleteWebElement() {
+        //TODO Auto-generated constructor stub
+    }
 }

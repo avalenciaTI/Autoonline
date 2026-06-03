@@ -123,13 +123,15 @@ public class PublicationCreation extends BrowserPage {
         super();
     }
 
-    public List<CompleteWebElement> quickVehicleCaseTypeCreation() {
+    public List<CompleteWebElement> quickVehicleCaseTypeCreation(String newPublication) {
         CommonComponents components = new CommonComponents();
         List<CompleteWebElement> storedValues = new ArrayList<>();
 
-        storedValues = components.fillField(caseType, CaseType.VARIOUS.getCaseType(), storedValues);
-        storedValues = components.fillField(publicationName, "TestAutomation DIV 2", storedValues);
-        storedValues = components.fillField(insuranceCompany, "QA TESTS AUTOMATION", storedValues);
+        //storedValues = components.fillField(caseType, CaseType.VARIOUS.getCaseType(), storedValues);
+        storedValues = components.fillField(caseType,CaseType.VEHICLES.getCaseType(), storedValues);
+        storedValues = components.fillField(publicationName, newPublication, storedValues);
+        //storedValues = components.fillField(publicationName, "TestAutomation DIV 2", storedValues);
+        storedValues = components.fillField(insuranceCompany, "ANA SEGUROS", storedValues);
 
         LocalDate endDate = LocalDate.now();
         endDate = endDate.plusDays(8);
@@ -151,8 +153,43 @@ public class PublicationCreation extends BrowserPage {
 
         new Buttons().clickSearchBtn();
 
-        searchCase("Test Div 5");
-        searchCase("Masiv_div_3");
+        searchCase("ANA2403000769");
+        searchCase("ANA2403000771");
+        new Buttons().clickSearchBtn();
+        activatePrePublication("ANA2403000769", "ANA2403000771");
+        return storedValues;
+    }
+
+
+
+    public List<CompleteWebElement> quickVehicleCaseVariousCreation(String newPublication) {
+        CommonComponents components = new CommonComponents();
+        List<CompleteWebElement> storedValues = new ArrayList<>();
+storedValues = components.fillField(caseType, CaseType.VARIOUS.getCaseType(), storedValues);
+        storedValues = components.fillField(publicationName, newPublication, storedValues);
+        //storedValues = components.fillField(publicationName, "TestAutomation DIV 2", storedValues);
+        storedValues = components.fillField(insuranceCompany, "ANA SEGUROS", storedValues);
+        LocalDate endDate = LocalDate.now();
+        endDate = endDate.plusDays(8);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String endDateFormatted = endDate.format(dateFormat);
+
+        new CommonComponents().setCalendarDatesText(endOfPublicationDate,endDateFormatted);
+        storedValues = components.fillField(insuranceCost,"1000", storedValues);
+
+        String focurOnYourOffert = getText(focusOnYourOfferSwitch);
+        log.info("FOCUS ON YOUR OFFER STATE: " + focurOnYourOffert, true);
+        if (focurOnYourOffert.equalsIgnoreCase("Sí")) {
+            click(focusOnYourOfferSwitch);
+        }
+        new CommonComponents().setTimeText(endOfPublicationHour,"08:30:00",managementCost);
+        storedValues = components.fillField(managementCost,"1002", storedValues);
+        storedValues = components.fillField(publicationComments,"Comentarios Publicación", storedValues);
+        click(toggleButtonBaseValue);
+        new Buttons().clickSearchBtn();
+        searchCase("ANA2403000769");
+        searchCase("ANA2403000771");
+        new Buttons().clickSearchBtn();
         return storedValues;
     }
 
@@ -163,7 +200,7 @@ public class PublicationCreation extends BrowserPage {
 
         storedValues = components.fillField(caseType,CaseType.VEHICLES.getCaseType(), storedValues);
         storedValues = components.fillField(publicationName, newPublication, storedValues);
-        storedValues = components.fillField(insuranceCompany,"QA TESTS AUTOMATION", storedValues);
+        storedValues = components.fillField(insuranceCompany,"ANA SEGUROS", storedValues);
 
         CurrentDateTime currentDateTime = TestDateGenerator.getCUrrentDateTime();
         new CommonComponents().setCalendarDatesText(endOfPublicationDate, currentDateTime.getDate());
@@ -218,7 +255,7 @@ public class PublicationCreation extends BrowserPage {
         log.info("Activating pre-publication");
 
         //Select case
-        waitForCaseTypeLoad();
+        //waitForCaseTypeLoad();
         log().image("Before search case", takeScreenshot());
         log.info("Activating pre-publication -> searchCase");
         searchCase(vinCase1);
@@ -226,21 +263,25 @@ public class PublicationCreation extends BrowserPage {
 
         //1st Guardar y continuar  // button type submit
         log.info("Activating pre-publication -> clickSearchBtn");
-        new Buttons().clickSearchBtn();
+        //new Buttons().clickSearchBtn();
 
         // -> wait for update publication-pre-publication page
-        waitForTableResultFadeAndReload();
+        //waitForTableResultFadeAndReload();
         // -> Seleccionar caso
         // also can use this method selectCaseInList()
 
         // selecting all cases in publication
-        click(getElement(By.xpath(ALL_CASES_XPATH)));
+        //click(getElement(By.xpath(ALL_CASES_XPATH)));
 
 
         new Buttons().waitForPreCaseActivationLoad();
         // -> Activate button
         new Buttons().clickActivateButton();
+        new Buttons().jsClickAcceptButtonBuyer();
         log.info("Activating pre-publication -> Activated button pressed");
+        waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.WAIT_FOR_NOTIFICATION);
+        log().image("Publication creation successfull: ", takeScreenshot());
+        waitForElementInvisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.NOTIFICATION_FADED);
     }
 
 
@@ -315,13 +356,23 @@ public class PublicationCreation extends BrowserPage {
     ///
 
 
-    public Boolean fastVariousPublicationValidation(AolWebUser user) {
+    public Boolean fastVariousPublicationValidation(AolWebUser user, String publicationId) {
         new MenuPage().clickPublications(PublicationsOptions.REGISTER);
         PublicationCreation publicationVarious = new PublicationCreation();
-        List<CompleteWebElement> values2Validate = publicationVarious.quickVehicleCaseTypeCreation();
+        List<CompleteWebElement> values2Validate = publicationVarious.quickVehicleCaseVariousCreation(publicationId);
 
         return true;
     }
+
+    public boolean quickPublicationCreationValidation(String publicationId) {
+        new MenuPage().clickPublications(PublicationsOptions.REGISTER);
+        PublicationCreation publicationVarious = new PublicationCreation();
+        List<CompleteWebElement> values2Validate = publicationVarious.quickVehicleCaseTypeCreation(publicationId);
+        return true;
+    }
+
+
+
 
     public List<CompleteWebElement> createPublication(String newPublication) {
         MenuPage menu = new MenuPage();

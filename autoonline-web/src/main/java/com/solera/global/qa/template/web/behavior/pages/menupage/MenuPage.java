@@ -21,7 +21,7 @@ public class MenuPage extends BrowserPage {
                     + "//li[2]";
 
     private static final String CATALOGS_SECTION = "//i[@class='anticon anticon-apartment']";
-    private static final String TRANSFERS_SECTION = "(//div[@class='ant-menu-submenu-title'])[7]";
+    private static final String TRANSFERS_SECTION = "//span[contains(text(), 'Traslados')]/ancestor::li";
     private static final String PUBLICATIONS_SECTION = "(//div[@class='ant-menu-submenu-title'])[8]";
     private static final String INVENTORY_SECTION = "(//div[@class='ant-menu-submenu-title'])[9]";
     private static final String AWARDINGS_SECTION = "//span[@title='Adjudicaciones']";
