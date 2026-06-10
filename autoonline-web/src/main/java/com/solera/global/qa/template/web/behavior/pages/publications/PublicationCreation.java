@@ -153,10 +153,12 @@ public class PublicationCreation extends BrowserPage {
 
         new Buttons().clickSearchBtn();
 
-        searchCase("ANA2403000769");
-        searchCase("ANA2403000771");
+
+        // Requirement: Search first the two cases to link , Link First to the Second
+        searchCase("ANA2401000434");
+        searchCase("ANA2403000774");
         new Buttons().clickSearchBtn();
-        activatePrePublication("ANA2403000769", "ANA2403000771");
+        activatePrePublication("ANA2401000434", "ANA2403000774");
         return storedValues;
     }
 

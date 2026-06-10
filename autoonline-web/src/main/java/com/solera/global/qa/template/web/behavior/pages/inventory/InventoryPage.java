@@ -232,7 +232,7 @@ public class InventoryPage extends BrowserPage {
         openInventoryEntryPhotosTab();
         Photos photos = new Photos();
         log().image("Before attaching images", takeScreenshot());
-        photos.attachImages(false);
+        photos.attachImagesTransfer(false);
     }
 
     /**

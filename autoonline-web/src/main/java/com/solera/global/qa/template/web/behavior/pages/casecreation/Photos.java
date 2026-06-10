@@ -135,6 +135,65 @@ public class Photos extends BrowserPage {
         }
     }
 
+    public void attachImagesTransfer(boolean openCamera) {
+        if (openCamera) {
+            loadPhotos();
+            waitForElementVisibility(paperClip);
+        }
+
+        String imgsFolder = "images5/";
+        String attachmentsFolder = AolWebPropertiesReader.getAttachmentsFolder(imgsFolder);
+        log.info("ATTACHMENTS FOLDER: {}", attachmentsFolder);
+
+
+        File folder = new File(attachmentsFolder);
+        File[] files = folder.listFiles();
+        int numFiles = files.length;
+        log.info("ATTACH IMAGES, images in folder: {}", numFiles);
+        final int filesPerIndex = 4;
+        StringBuilder files2Send = new StringBuilder();
+        String basePath = folder.getAbsolutePath() + File.separator;
+
+        for (int i = 0; i < numFiles; i++) {
+            String imgPath = basePath + files[i].getName();
+            log.info("IMG PATH: {}", imgPath);
+
+            File image = new File(imgPath);
+            if (image.exists()) {
+                log.info("IMAGE EXISTS: {}", imgPath);
+            }
+            files2Send.append(imgPath);
+            if (i < numFiles - 1) {
+                files2Send.append("\n");
+            }
+        }
+
+        log.info("TotalFiles: {}", files2Send.toString());
+        log.info("Sending files to hidden file input");
+        getElement(By.xpath(ATTACH_BUTTON)).sendKeys(files2Send.toString());
+        log.info("File uploaded");
+
+
+        int totalIndex = (int)Math.ceil((double) numFiles / filesPerIndex);
+        log.info("Page index: {}", totalIndex);
+        int filesIntoIndex = numFiles % filesPerIndex == 0 ? 4 : numFiles % filesPerIndex;
+        log.info("filesIntoIndex {}", filesIntoIndex);
+
+        for (int i = 1; i < totalIndex + 1; i++) {
+            log.info("starting iteration index {}", i);
+            String indexString = String.format(DYNAMIC_INDEX, i);
+
+            clickPaginationIndex(indexString, i);
+
+            log.info("clicked index {}", i);
+            waitForElementInvisibility(By.xpath(IMAGES_SKELETON), Timeouts.IMAGE_SKELETON_FADE);
+            if (i == totalIndex) {
+                sleep(4000);
+            }
+            log().image("loading images", takeScreenshot());
+        }
+    }
+
 
     public void markAsFavorite() {
         List<WebElement> elements = getDriver()

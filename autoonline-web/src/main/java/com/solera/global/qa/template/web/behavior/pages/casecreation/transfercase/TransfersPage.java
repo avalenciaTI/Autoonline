@@ -45,6 +45,8 @@ public class TransfersPage extends BrowserPage {
 
     public static final String SEARCH_DYNAMIC = "//td[text()='?']";
 
+    public static final String VALIDATE_CASE_NUMBER= "//tr[contains(@class, 'ant-table-row')]/td[3][normalize-space()]";
+
 
     public TransfersPage() {
         super();
@@ -215,19 +217,17 @@ public class TransfersPage extends BrowserPage {
 
 
 
-    public boolean generalSearchTranfer(String vin, String caseN) {
+    public boolean generalSearchTranfer(String vin4) {
         
         MenuPage menuPage = new MenuPage();//menu managment.
         TransferSearch casesMenu = new TransferSearch();
         log.info("searching case");
         menuPage.clickTransfers();
         sleep(5000);
-        casesMenu.clickSearchTranfer(vin);
+        casesMenu.clickSearchTranfer(vin4);
         log.info("Searching case in results");
         log().image("Results", takeScreenshot());
-        String criteriaResults = SEARCH_DYNAMIC.replace("?", caseN);
-        log.info("ending clickSearchCases..");
-        return getElement(By.xpath(criteriaResults)).isDisplayed();
+        return getElement(By.xpath(VALIDATE_CASE_NUMBER)).isDisplayed();
     }
 
 
