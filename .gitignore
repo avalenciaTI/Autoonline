@@ -95,4 +95,3 @@ output.xml
 
 #docker
 .docker/
-autoonline-web/src/test/resources/data/users/default.properties
