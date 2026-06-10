@@ -78,7 +78,7 @@ package-lock.json
 
 #logs & reports
 logs/
-reports/
+target/**/reports/
 screenshots/
 test-output/
 .allure
