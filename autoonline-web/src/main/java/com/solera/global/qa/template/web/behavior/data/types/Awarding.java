@@ -6,6 +6,9 @@ public class Awarding {
     private String vendor;
     private String insuranceCompany;
     private String caseStatus;
+    private String bidAmount;
+    private String vin;
+    private String publicationId;
 
     public Awarding() {
         // Default constructor
@@ -69,7 +72,21 @@ public class Awarding {
         this.bidAmount = bidAmount;
     }
 
-    private String bidAmount;
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getPublicationId() {
+        return publicationId;
+    }
+
+    public void setPublicationId(String publicationId) {
+        this.publicationId = publicationId;
+    }
 
 
 

@@ -21,8 +21,9 @@ public class CaseSearch extends BrowserPage {
     public static final String CASE_TYPE_FIELD = "//div[contains(@id,'caseType')]";
     public static final String GENERAL_SEARCH_FIELD = "search-cases_wildcard";
     public static final String ADVANCE_SEARCH_FIELD = "search-cases_caseId";
+    public static final String VISUAL_SERIE_SEARCH_FIELD = "search-cases_visualSerie";
     public static final String REPORT_BUTTON = "//button[@jest-id = 'reportButton']";
-    public static final String GENERAL_SEARCH_CRITERIA = "//a[contains(text(), '?')]";
+    public static final String GENERAL_SEARCH_CRITERIA = "//tr[contains(@class, 'ant-table-row')]//td[normalize-space()='?' or .//a[normalize-space()='?']]";
     public static final String ADVANCE_SEARCH_CRITERIA_QUERY = "//a[contains(text(), '?')]";
     public static final String ADVANCE_SEARCH_CRITERIA= "//button[@id='swap-search-button']";
     public static final String SEARCH_FILTER_GENERAL = "//input[contains(@data-testid,'data_test_?')]";
@@ -36,6 +37,7 @@ public class CaseSearch extends BrowserPage {
 
 
     public boolean generalSearch(CaseType caseTypeVal, String searchCriteria) {
+        waitForElementToBeClickable(getElement(By.xpath(CASE_TYPE_FIELD)), Timeouts.LOAD_ELEMENT);
         new CommonComponents().selectFromDropdownText(getElement(By.xpath(CASE_TYPE_FIELD)),caseTypeVal.getCaseType());
         log.info("Type of search selected");
 
@@ -48,6 +50,27 @@ public class CaseSearch extends BrowserPage {
 
         log().image("Results", takeScreenshot());
         String criteriaResults = GENERAL_SEARCH_CRITERIA.replace("?", searchCriteria);
+        log.info("ending clickSearchCases..");
+        return getElement(By.xpath(criteriaResults)).isDisplayed();
+    }
+
+
+
+
+     public boolean generalSearchByVisualSerie(CaseType caseTypeVal, String searchCriteria) {
+        waitForElementToBeClickable(getElement(By.xpath(CASE_TYPE_FIELD)), Timeouts.LOAD_ELEMENT);
+        new CommonComponents().selectFromDropdownText(getElement(By.xpath(CASE_TYPE_FIELD)),caseTypeVal.getCaseType());
+        log.info("Type of search selected");
+
+        sendKeys(getElement(By.id(VISUAL_SERIE_SEARCH_FIELD)),searchCriteria);
+        log.info("search criteria selected");
+        log().image("search criteria selected", takeScreenshot());
+        new Buttons().clickSearchBtn();
+        log.info("search button clicked");
+        waitForElementVisibility(getElement(By.xpath(REPORT_BUTTON)), Timeouts.LOAD_RESULTS);
+
+        log().image("Results", takeScreenshot());
+        String criteriaResults = VISUAL_SERIE_SEARCH_FIELD.replace("?", searchCriteria);
         log.info("ending clickSearchCases..");
         return getElement(By.xpath(criteriaResults)).isDisplayed();
     }

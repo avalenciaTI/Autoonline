@@ -12,7 +12,7 @@ import com.solera.global.qa.template.web.behavior.pages.payments.Supplier;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TransferSearch extends CommonSearch {
+public class InventorySearch extends CommonSearch {
 
     public static final String TRANSFER_STATUS_SELECTOR = "//div[contains(@id,'report-transfers_transferStatusId')]";
     public static final String TRANSFER_DETAILS_TITLE = "//h3[@class='ant-typography' "
@@ -25,11 +25,11 @@ public class TransferSearch extends CommonSearch {
                     + "/descendant::tr/descendant::td[contains(text(), '?')]"
                     + "/following-sibling::td/a[contains(text(), '1JKTS')]";
 
-    public static final String TRANSFERS_RESULTS_ROW =
+    public static final String INVENTORY_RESULTS_ROW =
             "//tbody[@class='ant-table-tbody']/tr[not(contains(@class,'ant-table-placeholder'))]";
 
     private static final String CITY_OR_TOWN_FIELD = "//input[contains(@id,'search-report-transfers_town')]";
-    private static final String REPORT_FILTER_DROPDOWN = "//div[contains(@id,'transfers_stateId')]";
+    private static final String REPORT_FILTER_DROPDOWN = "//div[contains(@id,'ReportType')]";
     private static final String MANUFACTURER_FIELD= "//input[contains(@id,'search-report-transfers_brand')]";
     private static final String TYPE_FIELD= "//input[contains(@id,'transfers_type')]";
     private static final String MODEL_FIELD= "//input[contains(@id,'transfers_model')]";
@@ -51,7 +51,7 @@ public class TransferSearch extends CommonSearch {
         WebElement generalSearchField;
 
 
-        public TransferSearch() {
+        public InventorySearch() {
             super();
         }
 
@@ -64,11 +64,6 @@ public class TransferSearch extends CommonSearch {
         log().image("Transfer status selected: " + status, takeScreenshot());
     }
 
-
-    public void setVinField(String vin) {
-        sendKeys(getElement(By.id(VIN_FIELD)), vin);
-        log().image("VIN set in search field", takeScreenshot());
-    }
 
     public void clickSearchButton() {
         CommonSearch commonSearch = new CommonSearch();
@@ -89,27 +84,11 @@ public class TransferSearch extends CommonSearch {
 
 
 
-
-    public void clickSearchTranfer(String searchCriteria) {
-        log.info("starting clickSearchCases..");
-        click(searchTranfer);
-        log.info("search Tranfer clicked");
-        sleep(2000);
-        sendKeys(generalSearchField, searchCriteria);
-        log.info("search criteria selected");
-        log().image("search criteria", takeScreenshot());
-        new Buttons().clickSearchBtn();
-        log.info("search button clicked");
-        log().image("search criteria results", takeScreenshot());
-         try {
-            waitForElementPresence(By.xpath(REPORT_BUTTON), Timeouts.LOAD_RESULTS);
-            log.info("Report button found after search");
-        } catch (Exception e) {
-            log.warn("Report button not found after search, continuing anyway: {}", e.getMessage());
-            log().image("Report button NOT found", takeScreenshot());
-        }
+     public void selectReportType(String fieldName, String value) {
+        WebElement dropdown = getElement(By.xpath(String.format(REPORT_FILTER_DROPDOWN, fieldName)));
+        new CommonComponents().selectFromDropdownText(dropdown, value);
+        log().image("Report dropdown " + fieldName + " selected: " + value, takeScreenshot());
     }
-
 
     public void selectInsurer(String insurer) {
         String insurerLocator = INSURANCE_COMPANY_SELECTOR.replace("?",insurer);
@@ -155,10 +134,10 @@ public class TransferSearch extends CommonSearch {
     }
 
 
-    public boolean waitForTransferResults() {
-        waitForElementPresence(By.xpath(TRANSFERS_RESULTS_ROW), Timeouts.LOAD_RESULTS);
-        boolean hasResults = !getElements(By.xpath(TRANSFERS_RESULTS_ROW)).isEmpty();
-        log().image("Transfer results displayed: " + hasResults, takeScreenshot());
+    public boolean waitForInventoryResults() {
+        waitForElementPresence(By.xpath(INVENTORY_RESULTS_ROW), Timeouts.LOAD_RESULTS);
+        boolean hasResults = !getElements(By.xpath(INVENTORY_RESULTS_ROW)).isEmpty();
+        log().image("Inventory results displayed: " + hasResults, takeScreenshot());
         return hasResults;
     }
 

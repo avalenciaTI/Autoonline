@@ -30,9 +30,11 @@ import com.solera.global.qa.template.web.behavior.pages.publications.Awardings;
 import com.solera.global.qa.template.web.behavior.pages.publications.PublicationCreation;
 import com.solera.global.qa.template.web.behavior.pages.publications.PublicationOnline;
 import com.solera.global.qa.template.web.behavior.pages.reports.AwardignsBuyer.ReportsAwardings;
+import com.solera.global.qa.template.web.behavior.pages.reports.Inventory.ReportsInventory;
 import com.solera.global.qa.template.web.behavior.pages.reports.cases.ReportsCases;
 import com.solera.global.qa.template.web.behavior.pages.reports.payments.ReportsPayments;
 import com.solera.global.qa.template.web.behavior.pages.reports.publications.ReportsPublications;
+import com.solera.global.qa.template.web.behavior.pages.reports.transfers.ReportsTransfers;
 import com.solera.global.qa.template.web.behavior.pages.usercreation.individualregistration.AdministratorMasterInter;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -333,6 +335,8 @@ public class WebTestBase extends TestBase {
     public ReportsCases reportsCases(){return new ReportsCases();}
     public ReportsPayments reportsPayments(){return new ReportsPayments();}
     public ReportsAwardings reportsAwardings() {return new ReportsAwardings();}
+    public ReportsTransfers reportsTransfers() {return new ReportsTransfers();}
+    public ReportsInventory reportsInventory() {return new ReportsInventory();}
 
     public IndividualRegistration caseIndividualRegistration() {
         return new IndividualRegistration();

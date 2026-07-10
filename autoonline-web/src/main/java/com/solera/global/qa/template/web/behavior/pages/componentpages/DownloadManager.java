@@ -41,6 +41,10 @@ public class DownloadManager {
         }
     }
 
+    public File getDownloadedFileByPartialName(String expectedPartialName, String extension, int timeoutSeconds) {
+        return waitForDownloadedFile(expectedPartialName, extension, timeoutSeconds);
+    }
+
     public void openDownloadedFileByPartialName(String expectedPartialName, String extension, int timeoutSeconds) {
         File fileToOpen = waitForDownloadedFile(expectedPartialName, extension, timeoutSeconds);
         if (fileToOpen == null) {

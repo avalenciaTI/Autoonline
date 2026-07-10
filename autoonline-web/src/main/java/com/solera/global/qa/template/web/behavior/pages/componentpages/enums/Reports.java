@@ -46,6 +46,27 @@ public enum Reports {
             new ArrayList<Integer>() {{ }},
             new ArrayList<Integer>() {{ add(2); }}
     ),
+    REPORTS_INVENTORY_GENERAL("target/test-classes/attachments/"
+            + "reportCompare/Reporte_entradas_al_inventario_general.xlsx",
+            ".xlsx",
+            "Reporte entradas al",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_INVENTORY_EXITS("target/test-classes/attachments/"
+            + "reportCompare/Reporte_salidas_del_inventario.xlsx",
+            ".xlsx",
+            "Reporte salidas del",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_INVENTORY_PENDING_ENTRY_VEHICLES("target/test-classes/attachments/"
+            + "reportCompare/Reporte_vehiculos_por_ingresar.xlsx",
+            ".xlsx",
+            "Reporte Vehículos por ingresar",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
     REPORTS_PAYMENT_REPORT_ADMIN_VEH("target/test-classes/attachments/"
             + "reportCompare/Reporte_pagos_veh_admin.xlsx",
             ".xlsx",
@@ -59,6 +80,92 @@ public enum Reports {
             "Reporte_adjudicaciones_vehiculos",
             new ArrayList<Integer>() {{ }},
             new ArrayList<Integer>() {{ add(2); }}
+    ),
+    // Transfer reports: app download is always "Reporte de traslados_<ddMMyyyy>.xlsx" (expectedName below).
+    // Baselines (fileNamePath) differ per TC because Excel columns/content change per filter.
+    REPORTS_TRANSFERS_GLOBAL("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_global.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_INSURER("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_aseguradora.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_PROVIDER("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_proveedor.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_BRANCH("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_sucursal.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_CITY("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_ciudad.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_ORIGIN("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_origen.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_MANUFACTURER("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_fabricante.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_TYPE("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_tipo.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_MODEL("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_modelo.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_UNIT_TYPE("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_tipo_unidad.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_DATES("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_fechas.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
+    ),
+    REPORTS_TRANSFERS_BY_STATUS("target/test-classes/attachments/"
+            + "reportCompare/Reporte_traslados_por_estatus.xlsx",
+            ".xlsx",
+            "Reporte de traslados_",
+            new ArrayList<Integer>() {{ }},
+            new ArrayList<Integer>() {{ }}
     );
 
     private final String fileNamePath;

@@ -66,7 +66,7 @@ public class IdGenerator {
     public static String getNewPublicationId() {
         DateFormat dateFormat = new SimpleDateFormat("ddMMyyhhmmss");
         var currentDate = Calendar.getInstance().getTime();
-        return  "TestAutomation DIV " + dateFormat.format(currentDate);
+        return  "bulkaward-TestAutomation" + dateFormat.format(currentDate);
     }    
 
 }

@@ -5,6 +5,7 @@ import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.pages.casecreation.RegistrationMenu;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.submenu.AwardingsOptions;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.submenu.PublicationsOptions;
+import com.solera.global.qa.template.web.behavior.pages.componentpages.submenu.ReportsOptions;
 import com.solera.global.qa.template.web.behavior.pages.usercreation.MassiveRegistrationUsers;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -27,7 +28,7 @@ public class MenuPage extends BrowserPage {
     private static final String AWARDINGS_SECTION = "//span[@title='Adjudicaciones']";
     private static final String PAYMENTS_SECTION = "//span[text()='Pagos']";
     private static final String PAYMENTS_SUBMENU = "//a[@href='/payments/search/initial']";
-    private static final String REPORTS_SECTION = "(//div[@class='ant-menu-submenu-title'])[12]";
+    private static final String REPORTS_SECTION = "//span[contains(text(), 'Reportes')]/ancestor::li";
     private static final String LOGBOOK_SECTION = "(//div[@class='ant-menu-submenu-title'])[13]";
 
     private static final String EXTEND_MENU_ARROW = "//i[@class='anticon anticon-right']";
@@ -114,12 +115,12 @@ public class MenuPage extends BrowserPage {
     public void clickAwardings(AwardingsOptions subMenuOption) {
         click(awardingsSection);
         String xp = String.format(LINK_XP, subMenuOption.getAwardingSubMenuSelection());
-        WebElement search = publicationsSection.findElement(By.xpath(xp));
-        waitForElementToBeClickable(search, Timeouts.LOAD_ELEMENT);
-        click(search);
+        //WebElement search = awardingsSection.findElement(By.xpath(xp));
+        waitForElementToBeClickable(getElement(By.xpath(xp)), Timeouts.LOAD_ELEMENT);
+        jsClick(getElement(By.xpath(xp)));
     }
 
-    public void clickAwardings(AwardingsOptions subMenuOption, String role) {
+    public void clickAwardingss(AwardingsOptions subMenuOption, String role) {
 
         log().image("After click Awardings section", takeScreenshot());
         if (role.equalsIgnoreCase("physical_buyer")) {
@@ -181,12 +182,50 @@ public class MenuPage extends BrowserPage {
 
     }
 
-    public void clickReports() {
+    public void clickReports(ReportsOptions subMenuSelection) {
         click(reportsSection);
+        String submenuXP = String.format(LINK_XP, subMenuSelection.getSubMenuSelection());
+        WebElement search = reportsSection.findElement(By.xpath(submenuXP));
+        waitForElementToBeClickable(search, Timeouts.LOAD_ELEMENT);
+        switch (subMenuSelection.getSubMenuSelection()) {
+            case "/reports/transfers":
+                click(getDriver().findElement(By.xpath("//a[@href='/reports/transfers']")));
+                break;
+            case "/reports/inventory":
+                click(getDriver().findElement(By.xpath("//a[@href='/reports/inventory']")));
+                break;
+            default:
+        }
     }
 
     public void clickLogbook() {
         click(logbookSection);
+    }
+
+
+     public void clickAwardingsBuyer() {
+        log.info(OPEN_RIGHT_PANEL);
+            click(getElement(By.xpath(EXTEND_MENU_ARROW)));
+            log.info("Right arrow clicked");
+            sleep(2000);
+            log().image("After click right arrow", takeScreenshot());
+
+            //Adjudications menu
+            click(getElement(By.xpath(ADJUDICATIONS_MENU_BUYER)));
+            log.info("Adjudications menu clicked");
+            sleep(2000);
+            log().image("After click Adjudications menu", takeScreenshot());
+
+            click(getElement(By.xpath(CONSULT_ADJUDICATION)));
+            sleep(100);
+
+            click(getElement(By.xpath(VEHICLE_SUBMENU)));
+            log().image("After click Consult Adjudications menu for buyer", takeScreenshot());
+
+            click(getElement(By.xpath(OPEN_DRAWER)));
+            log().image("After click Open Drawer", takeScreenshot());
+
+            log().image("Click on Consulta Adjudications menu for buyer", takeScreenshot());
     }
 
 }

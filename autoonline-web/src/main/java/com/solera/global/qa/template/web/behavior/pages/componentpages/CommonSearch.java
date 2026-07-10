@@ -32,7 +32,21 @@ public class CommonSearch extends BrowserPage {
 
     public static final String INSURANCE_COMPANY_SELECTOR =
             "//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
+
+    public static final String INSURANCE_MARKET_SELECTOR =
+            "//div[contains(@id,'CarrierId')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
     
+    public static final String SUPPLIER_CRANE_SELECTOR =
+            "//div[contains(@id,'craneProviderId')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
+
+    public static final String CRANE_SUPPLIER_BRANCH_SELECTOR =
+            "//div[contains(@id,'craneBranchId')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
+
+    public static final String SUPPLIER_CORRALON_SELECTOR =
+            "//div[contains(@id,'carPoundId')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
+
+    public static final String CORRALON_SUPPLIER_BRANCH_SELECTOR =
+            "//div[contains(@id,'carPoundBranchId')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";
 
     public static final String SUPPLIER_COMPANY_SELECTOR =
             "//div[contains(@id,'suppliers')]//input[@type='checkbox' and @class='ant-checkbox-input' and @value='?']";

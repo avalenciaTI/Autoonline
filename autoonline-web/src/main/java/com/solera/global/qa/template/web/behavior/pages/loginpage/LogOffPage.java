@@ -21,7 +21,7 @@ public class LogOffPage extends BrowserPage {
         log.info("Logging off the user");
         click(getElement(By.xpath(USER_ICON)));
         click(getElement(By.xpath(LOG_OFF)));
-        new Buttons().clickAcceptButton();
+        new Buttons().jsClickAcceptButton();
         waitForElementPresence(By.id(USER_LOGIN), Timeouts.CLOSE_SESSION);
     }
 

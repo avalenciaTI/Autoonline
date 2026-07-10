@@ -3,6 +3,7 @@ package com.solera.global.qa.template.web.behavior.pages.componentpages.search;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonSearch;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.CaseType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.ICaseType;
+import com.solera.global.qa.template.web.behavior.pages.payments.Insurers;
 import com.solera.global.qa.template.web.behavior.pages.payments.PaymentStatus;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -12,6 +13,8 @@ public class PaymentSearch extends CommonSearch {
 
     private static final String PAYMENT_STATUS = "//input[@type='checkbox' and @value='?']";
     private static final String PAYMENT_STATUS_LABEL = "//label[contains(text(),'Estatus de pago')]";
+    private static final String INSURANCE_COMPANY_SELECTOR_PAYMENT =
+            "//div[@id='search-payments_insuranceCarrierId']//input[@type='checkbox' and @value='?']";
 
     public void setCaseType(ICaseType caseType) {
         this.selectCaseTypeTst(CaseType.VEHICLES);
@@ -22,9 +25,16 @@ public class PaymentSearch extends CommonSearch {
         String statusLocator = PAYMENT_STATUS.replace("?", paymentStatus.getStatus());
         WebElement paymentStatusElement = getElement(By.xpath(statusLocator));
 
-        scrollTo(getElement(By.xpath(PAYMENT_STATUS_LABEL)));
+       scrollTo(getElement(By.xpath(PAYMENT_STATUS_LABEL)));
 
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", paymentStatusElement);
         log().image("Selected payment status", takeScreenshot());
+    }
+
+    public void selectInsurerPayment(Insurers insurer) {
+        String insurerLocator = INSURANCE_COMPANY_SELECTOR_PAYMENT.replace("?", insurer.getInsurer());
+        WebElement insurerElement = getBrowser().getDriver().findElement(By.xpath(insurerLocator));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", insurerElement);
+        log().image("Insurer selected", takeScreenshot());
     }
 }

@@ -1,6 +1,7 @@
 package com.solera.global.qa.template.web.behavior.pages.componentpages;
 
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
+import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.TypeOfDate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -24,7 +25,7 @@ public class PublicationSearch extends BrowserPage {
 
     public static final String USER_CALENDAR_INPUT = "//div[@class='ant-calendar-date-input-wrap']/input";
     public static final String SEARCH_PUBLICATION_IN_RESULTS = "//td[text()='%s']";
-
+    private static final String PAYMENT_CASE_ID_FIELD = "//input[contains(@id,'search-payments_caseId')]";
 
 
     @FindBy(id = PUBLICATION_TYPE_FORM_ID)
@@ -40,6 +41,7 @@ public class PublicationSearch extends BrowserPage {
     @FindBy(xpath = END_DATE_LABEL) WebElement endDateLabel;
     @FindBy(id = PUBLICATION_NAME_FIELD) WebElement publicationName;
     @FindBy(id = PUBLICATION_ID_FIELD) WebElement publicationIDField;
+    @FindBy(xpath = PAYMENT_CASE_ID_FIELD) WebElement paymentCaseIDField;
 
     public PublicationSearch() {
         super();
@@ -88,6 +90,12 @@ public class PublicationSearch extends BrowserPage {
 
     public void search() {
         new Buttons().clickSearchBtn();
+    }
+
+
+    public void setPaymentCaseID(String paymentCaseID) {
+        waitForElementToBeClickable(getElement(By.xpath(PAYMENT_CASE_ID_FIELD)), Timeouts.LOAD_ELEMENT);
+        sendKeys(paymentCaseIDField, paymentCaseID);
     }
 
 

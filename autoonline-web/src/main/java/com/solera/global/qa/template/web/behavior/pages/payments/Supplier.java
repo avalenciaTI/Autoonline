@@ -4,6 +4,7 @@ public enum Supplier {
     ALL("*****"),
     FERNANDO_REGRESION("PFIA037"),
     GRUAS_AUTOONLINE("PGAO035"),
+    QA_REGRESION("SFER065"),
     CHAVARRIA("PCHA008");
 
     private final String supplier;

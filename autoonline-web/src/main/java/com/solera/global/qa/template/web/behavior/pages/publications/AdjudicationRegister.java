@@ -66,6 +66,6 @@ public class AdjudicationRegister extends BrowserPage {
         new CommonComponents().setCalendarDatesText(paymentLimitDate, paymentLimitDateInput, limitDate);
         sleep(3000);
         log().image("Register filled fieds", takeScreenshot());
-        new Buttons().clickAcceptButton();
+        new Buttons().jsClickAcceptButton();
     }
 }

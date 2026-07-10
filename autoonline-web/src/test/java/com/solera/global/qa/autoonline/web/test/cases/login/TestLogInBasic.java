@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestLogInBasic extends WebTestBase {
 	private static String vin ;
 	private static String vin3 = "1JKTS177580528129";
-	private static String vin2 = "TESTVEHAUTOAMTED1JKTS177698746614";
+	private static String vin2 = "QAT2604001390";
 	private static String vin4 = "1JKTS177698746614";
 	private static String vin5 = "1JKTS177696978143";
 	private static String caseN = "QAT2604001381";
@@ -131,6 +131,19 @@ public class TestLogInBasic extends WebTestBase {
 				.as("MISCELLANEOUS CONSULTATION SUCCESS").isTrue();
 	}
 
+
+	@Test(priority = 29)
+	@TmsData.Tc(tcId = 160931, tcName = "CP029_General inquiry transfers", tcType = TcType.REGRESSION)
+	public void tc29_generalInquiryTransfers() {
+		AolWebUser master = this.users.getMasterUser();
+		loginPage().logIn(master);
+		mainMenu().clickCases();
+		registrationMenu().consultCases();
+		assertions().assertThat(caseSearch().generalSearch(CaseType.TRANSFERS, vin2))
+				.as("CASE SEARCH SUCCESS?").isTrue();
+	}
+
+
 	@Test(priority = 30)
 	@TmsData.Tc(tcId = 160931, tcName = "CP030_General consultation vehicles", tcType = TcType.REGRESSION)
 	public void tc30_caseVehicleConsult() {
@@ -150,6 +163,41 @@ public class TestLogInBasic extends WebTestBase {
 		assertions().assertThat(caseIndividualRegistration().miscellaneousAdvancedQuery())
 				.as("MISCELLANEOUS CONSULTATION SUCCESS").isTrue();
 	}
+
+
+//passed
+	@Test(priority = 3936400)
+	@TmsData.Tc(tcId = 34, tcName = "CP034_Miscellaneous mass record", tcType = TcType.REGRESSION)
+	public void tc34_miscellaneousMassRecord() {
+		AolWebUser master = this.users.getMasterUser();
+		loginPage().logIn(master);
+		assertions().assertThat(caseIndividualRegistration().miscellaneousMassRecord())
+				.as("MISCELLANEOUS MASS RECORD SUCCESS").isTrue();
+	}
+
+
+	@Test(priority = 3936401)
+	@TmsData.Tc(tcId = 35, tcName = "CP035_Massive vehicle registration publication", tcType = TcType.REGRESSION)
+	public void tc35_massiveVehicleRegistrationPublication() {
+		AolWebUser master = this.users.getMasterUser();
+		loginPage().logIn(master);
+		assertions().assertThat(caseIndividualRegistration().massiveVehicleRegistrationPublication())
+				.as("MASSIVE VEHICLE REGISTRATION PUBLICATION SUCCESS").isTrue();
+	}
+
+
+
+@Test(priority = 3936402)
+	@TmsData.Tc(tcId = 36, tcName = "CP036_Massive vehicle registration management", tcType = TcType.REGRESSION)
+	public void tc36_massiveVehicleRegistrationManagement() {
+		AolWebUser master = this.users.getMasterUser();
+		loginPage().logIn(master);
+		assertions().assertThat(caseIndividualRegistration().massiveVehicleRegistrationManagement())
+				.as("MASSIVE VEHICLE REGISTRATION MANAGEMENT SUCCESS").isTrue();
+	}
+
+
+
 
 	//Passed
 	@Test(priority = 37)
@@ -258,6 +306,9 @@ public class TestLogInBasic extends WebTestBase {
 		assertions().assertThat(caseIndividualRegistration().vehicleIndividualRegistration_AddImages(vin, caseData))
 				.as("CASE CREATION SUCCESS").isTrue();
 	}
+
+
+
 
 	@Test(priority = 76)
 	@TmsData.Tc(tcId = 3936389, tcName = "CP076_Login to the system with buyer user", tcType = TcType.REGRESSION)

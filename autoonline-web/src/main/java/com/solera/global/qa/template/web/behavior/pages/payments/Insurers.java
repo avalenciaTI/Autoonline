@@ -4,6 +4,7 @@ public enum Insurers {
     ALL("*****"),
     AIG("AAIG003"),
     ANA_INSURER("AANA002"),
+    ASEGURADORA_PRUEBAS("AAPR011"),
     LFFS_INSURER("AASE191"),
     TEST_INSURER("AAPR011"),
     QA_REG_INSURER("AASR221"),

@@ -2,17 +2,24 @@ package com.solera.global.qa.template.web.behavior.pages.payments;
 
 import static com.solera.global.qa.template.web.behavior.pages.publications.PublicationOnline.GENERIC_AUTOMATION_NAME;
 
+import com.amazonaws.services.s3.transfer.Download;
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
+import com.solera.global.qa.template.web.behavior.pages.componentpages.DownloadManager;
+import com.solera.global.qa.template.web.behavior.pages.componentpages.ZipValidator;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.CaseType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.search.PaymentSearch;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 
 @Slf4j
@@ -21,8 +28,10 @@ public class PaymentPage extends BrowserPage {
     private static final String PAYMENT_DETAIL_PAGE = "//div[text()='Informacion de comprobante de pago']";
     private static final String UPLOAD_PAYMENT_TICKETS =
             "//span[text()='Adjuntar comprobantes de pago']/ancestor::button";
+    private static final String DOWNLOAD_PAYMENT_FOLDER =
+            "//span[text()='Carpeta de pagos']/ancestor::button";
     private static final String PENDING_PAYMENT_VALIDATION = "//tr[@class='ant-table-row ant-table-row-level-0']"
-            + "/td[contains(text(), '30,000,000')]/preceding-sibling::td[contains(text(), 'Por validar')]"
+            + "/td[contains(text(), '30,000')]/preceding-sibling::td[contains(text(), 'Por validar')]"
             + "/preceding-sibling::td/a[contains(text(), '" + GENERIC_AUTOMATION_NAME + "')]";
 
     private static final String COMPLETE_PAYMENT_CARDS = "//span[contains(text(), 'Comprobante de pago')]"
@@ -47,10 +56,47 @@ public class PaymentPage extends BrowserPage {
     private static final String PENDING_DOCUMENT_LINKS = "//div[@data-test='listItemComponent' "
             + "and not(descendant::button[contains(@style,'rgb(59, 181, 74)')])]/descendant::a";
     private static final String DOWNLOAD_BUTTON = "//button[@jest-id='DownloadFile' and @title='Descargar archivos']";
+    private static final String COMMENT_APPROVAL = "//textarea[contains(@data-testid,'data_test_comments')]";
+    private static final String SELECT_DROP_DOWN_LIST  = "((//*[@id='main-container']//div[contains(@class, 'ant-select-selection--single')])[2])";
+    private static final String SELECT_DROP_DOWN_LIST_OPTION = "//li[contains(@class, 'ant-select-dropdown-menu-item') and text()='100']";
 
 
+    // Case ID extraction from the consult results table
+    private static final String CONSULT_RESULT_CASE_LINKS = "//tr[contains(@class, 'ant-table-row-level-0')]/td[3]";
+    public static final String INSURANCE_COMPANY_SELECTOR_PAYMENT =
+    "//div[@id='search-payments_insuranceCarrierId']//input[@type='checkbox' and @value='?']";
+
+
+   
 
     ///
+    public List<String> getConsultResultCaseIds() {
+        waitForElementPresence(By.xpath(CONSULT_RESULT_CASE_LINKS), Timeouts.LOAD_RESULTS);
+        List<WebElement> caseLinkElements = getElements(By.xpath(CONSULT_RESULT_CASE_LINKS));
+        if (caseLinkElements.isEmpty()) {
+            log.warn("No case ID links found in payment consult results");
+            return new ArrayList<>();
+        }
+        List<String> caseIds = caseLinkElements.stream()
+                .map(el -> getText(el))
+                .collect(Collectors.toList());
+        log.info("Found {} case IDs in consult results: {}", caseIds.size(), caseIds);
+        log().image("Consult results with case IDs", takeScreenshot());
+        return caseIds;
+    }
+
+    public boolean validateDownloadedPaymentFolderZip(List<String> expectedCaseIds) {
+        log.info("Starting payment folder ZIP validation with {} expected case IDs", expectedCaseIds.size());
+        ZipValidator zipValidator = new ZipValidator();
+        boolean isValid = zipValidator.validateZipDownloadAndContents("Carpeta de pagos", 60, expectedCaseIds);
+        if (isValid) {
+            log.info("Payment folder ZIP validated successfully - all {} case IDs found", expectedCaseIds.size());
+        } else {
+            log.error("Payment folder ZIP validation failed");
+        }
+        return isValid;
+    }
+
     public void searchPendingPayment() {
         PaymentSearch search = new PaymentSearch();
         search.selectCaseTypeTst(CaseType.VEHICLES);
@@ -237,6 +283,7 @@ public class PaymentPage extends BrowserPage {
 
     public void approveDocument() {
         log.info("Before document approval");
+        sendKeys(getElement(By.xpath(COMMENT_APPROVAL)), "Comentario APPROVAL QA");
         new Buttons().clickApprovalButton();
         log().image("After document approval", takeScreenshot());
     }
@@ -248,5 +295,71 @@ public class PaymentPage extends BrowserPage {
         waitForElementInvisibility(getElement(By.xpath(PAYMENT_WINDOW_CLOSE)), Timeouts.LOAD_BUTTON);
         log.info("Invisible window");
     }
-}
 
+
+
+ public void DocumentedDownloadPaymentFolder () {
+        searchStatusPayments();
+        clickDownloadPaymentFolderButton();
+    }
+
+    public boolean downloadPaymentFolder() {
+        searchStatusPayments();
+
+        List<String> caseIds = getConsultResultCaseIds();
+        if (caseIds.isEmpty()) {
+            log.warn("No case IDs found in consult results - cannot validate ZIP");
+            return false;
+        }
+        log.info("Case IDs found in consult results: {}", caseIds);
+
+        clickDownloadPaymentFolderButton();
+
+        boolean zipValid = validateDownloadedPaymentFolderZip(caseIds);
+        if (zipValid) {
+            log.info("Payment folder downloaded and validated successfully");
+        } else {
+            log.error("Payment folder ZIP validation failed");
+        }
+        return zipValid;
+    }
+
+    public void searchStatusPayments() {
+        PaymentSearch search = new PaymentSearch();
+        search.selectCaseTypeTst(CaseType.VEHICLES);
+        log().image("Selected vehicle case type", takeScreenshot());
+
+        search.selectInsurerPayment(Insurers.ALL);
+        search.selectPaymentStatus(PaymentStatus.APPROVED);
+        search.search();
+        sleep(1500);
+        selectPageSize100();
+        waitForElementToBeClickable(getElement(By.xpath(DOWNLOAD_PAYMENT_FOLDER)), Timeouts.LOAD_RESULTS);
+        log.info("Search for status payments completed");
+    }
+
+    private void selectPageSize100() {
+        WebElement dropdown = getElement(By.xpath(SELECT_DROP_DOWN_LIST));
+        waitForElementToBeClickable(dropdown, Timeouts.LOAD_ELEMENT);
+        jsClick(dropdown);
+        sleep(1500);
+        jsClick(getElement(By.xpath(SELECT_DROP_DOWN_LIST_OPTION)));
+        log.info("Selected 100 items per page");
+    }
+
+    public void clickDownloadPaymentFolderButton() {
+        jsClick(getElement(By.xpath(DOWNLOAD_PAYMENT_FOLDER)));
+        log.info("Clicked on download payment folder button");
+    }
+
+
+    public void selectInsurerPayment(Insurers insurer) {
+        String insurerLocator = INSURANCE_COMPANY_SELECTOR_PAYMENT.replace("?", insurer.getInsurer());
+        WebElement insurerElement = getBrowser().getDriver().findElement(By.xpath(insurerLocator));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", insurerElement);
+        log().image("Insurer selected", takeScreenshot());
+    }
+
+     
+
+}

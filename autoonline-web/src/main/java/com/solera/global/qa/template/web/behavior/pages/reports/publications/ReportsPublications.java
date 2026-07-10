@@ -26,7 +26,7 @@ public class ReportsPublications extends BrowserPage {
 
 
     private final LogInPage login = new LogInPage();
-    private final FilesCompare filesActions = new FilesCompare();
+    public final FilesCompare filesActions = new FilesCompare();
 
     public ReportsPublications() {
         super();

@@ -6,6 +6,7 @@ import static com.solera.global.qa.template.web.behavior.pages.publications.Publ
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonSearch;
+import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.enums.AdjudicationStatus;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class AdjudicationSearch extends CommonSearch {
     private static final String AWARDING_CONSULT =
             "(//li[@class='ant-menu-submenu ant-menu-submenu-vertical']//*[text()='Consultar'])[2]";
 
-
+    private static final String ADJUDICATION_CASE_ID_FIELD = "//input[contains(@id,'search-adverts_caseId')]";
 
 
     public void selectAdjudicationStatus(AdjudicationStatus status) {
@@ -67,6 +68,15 @@ public class AdjudicationSearch extends CommonSearch {
             }
         }
         return null;
+    }
+
+    public void setAdjudicationCaseID(String adjudicationCaseID) {
+        waitForElementToBeClickable(getElement(By.xpath(ADJUDICATION_CASE_ID_FIELD)), Timeouts.LOAD_ELEMENT);
+        sendKeys(getElement(By.xpath(ADJUDICATION_CASE_ID_FIELD)), adjudicationCaseID);
+    }
+
+    public void search() {
+        new Buttons().clickSearchBtn();
     }
 
 

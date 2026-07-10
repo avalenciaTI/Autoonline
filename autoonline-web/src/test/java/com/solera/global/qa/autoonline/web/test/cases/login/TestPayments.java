@@ -94,4 +94,19 @@ public class TestPayments extends WebTestBase {
         paymentPage.verifyPayments();
     }
 
+
+
+
+
+     @Test(priority = 44)
+    @TmsData.Tc(tcId = 3936494, tcName = "CP0XX_toBeDocumented [ManagerUser][Download payment Folder]", tcType = TcType.REGRESSION)
+    public void tc44_downloadPaymentFolder () {
+        AolWebUser master = this.users.getMasterUser();
+        loginPage().logIn(master);
+        new MenuPage().clickPayments();
+        PaymentPage paymentPage = new PaymentPage();
+        assertions().assertThat(paymentPage.downloadPaymentFolder())
+                .as("Payment folder should be downloaded and ZIP validated successfully").isTrue();
+    }
+
 }

@@ -16,12 +16,13 @@ public class PublicationAdjudication extends BrowserPage {
     private static final String PUBLICATIONS_PAGE_TITLE = "//h3[@class='ant-typography text-left' "
             + "and text()='Consultar adjudicaciones por unidad']";
 
-    private static final String INSURER_NAME = "//h3[text()='Mercado (Aseguradora)']/following-sibling::h3";
+    private static final String INSURER_NAME = "//td[contains(@class, 'ant-descriptions-item')]//span[contains(text(), 'Mercado')]/following-sibling::span";
     private static final String PUBLICATION_NAME = "//h3[text()='Nombre de la publicación']/following-sibling::h3";
-    private static final String SINISTER = "//h3[text()='Siniestro']/following-sibling::h3";
+    private static final String SINISTER = "//td[contains(@class, 'ant-descriptions-item')]//span[contains(text(), 'Siniestro')]/following-sibling::span";
     private static final String STATUS = "//h3[text()='Estatus del caso']/following-sibling::h3";
-    private static final String OFFERED_AMOUNT = "//div[@class='amount-text text-center' and contains(text(), '$')]";
-
+    private static final String OFFERED_AMOUNT = "//span[contains(@class, 'offer-value') and contains(text(), '$')]";
+    private static final String VIN = "//td[contains(@class, 'ant-descriptions-item')]//span[contains(text(), 'Serie')]/following-sibling::span";
+    private static final String PUBLICATION_ID = "//td[contains(@class, 'ant-descriptions-item')]//span[contains(text(), 'ID de publicación')]/following-sibling::span";
     private static final String ADJUDICATION_BUTTON = "//a[@class='ant-btn ant-btn-default ant-btn-round btn-link ' "
             + "and text()='Adjudicar']";
     private static final String DETAILS_BUTTON = "//a[@class='ant-btn ant-btn-default ant-btn-round btn-link ' "
@@ -78,6 +79,20 @@ public class PublicationAdjudication extends BrowserPage {
         return getText(amountElement);
     }
 
+     public String verifyVin(String vin) {
+        waitForElementPresence(getElement(By.xpath(VIN)), Timeouts.LOAD_HEAVY_RESULTS);
+        WebElement vinElement = getElement(By.xpath(VIN));
+        assertions().assertThat(getText(vinElement)).as("Verify VIN").isEqualTo(vin);
+        return getText(vinElement);
+    }
+
+      public String verifyPublicationId(String publication) {
+        WebElement publicationElement = getElement(By.xpath(PUBLICATION_ID));
+        assertions().assertThat(getText(publicationElement)).as("Verify Publication Id")
+                .contains(publication);
+        return getText(publicationElement);
+    }
+
 
     public void clickAdjudicationButton() {
         log.info("In adjudication page, clicking on adjudication button");
@@ -87,7 +102,7 @@ public class PublicationAdjudication extends BrowserPage {
 
     public Awarding registerAdjudication(String paymentReference, String adminPaymentRefInsurer) {
         log.info("Registering adjudication");
-        final var awarding = verifyAdjudication();
+       final var awarding = verifyAdjudication();
         clickAdjudicationButton();
         log().image("Adjudication button clicked", takeScreenshot());
         var registration = new AdjudicationRegister();
@@ -167,10 +182,10 @@ public class PublicationAdjudication extends BrowserPage {
         Awarding awarding = new Awarding();
         log().image("Adjudication page", takeScreenshot());
         awarding.setInsuranceCompany(verifyInsurerName("QA TESTS AUTOMATION"));
-        awarding.setPublicationName(verifyPublicationName("TESTAUTOMATION DIV"));
+        awarding.setPublicationId(verifyPublicationId("QATV2606000023"));
         awarding.setSinister(verifySinister(GENERIC_AUTOMATION_NAME));
-        awarding.setCaseStatus(verifyStatus("Por adjudicar"));
         awarding.setBidAmount(verifyOfferedAmount("30000000"));
+        awarding.setVin(verifyVin("1JKTS178111790290"));
         return awarding;
     }
 

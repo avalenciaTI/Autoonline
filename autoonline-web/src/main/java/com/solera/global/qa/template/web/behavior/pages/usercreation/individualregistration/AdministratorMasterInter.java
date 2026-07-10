@@ -37,6 +37,7 @@ public class AdministratorMasterInter extends BrowserPage {
     private static final String TEST_USER_NAME = "Ernesto Automation";
     private static final String EMAIL_PREFIX = "testautomation";
     private static final String EMAIL_DOMAIN = "@test.com";
+    private static final String INVITATION_EMAIL_DOMAIN = "@yopmail.com";
     private static final String NAME_PREFIX = "Automatizacion";
     private static final String ALPHANUMERIC_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final String ALFAPREFIX = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -44,10 +45,23 @@ public class AdministratorMasterInter extends BrowserPage {
     private static String lastGeneratedEmail;
     private static String lastGeneratedName;
     private static String lastPrefix;
+    private static String extractedFrontendEmail;
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
     private static final String CLOSE_NOTIFICATION_XP = "//i[@class='anticon anticon-close ant-notification-close-icon']";
     private static final String EXISTENT_EMAIL_NOT = "//div[contains(text(),'El correo electrónico ingresado "
             + "corresponde a una cuenta de usuario existente. Ingrese un nuevo correo.')]";
+    // Yopmail locators
+    private static final String YOPMAIL_URL = "https://www.yopmail.com";
+    private static final String YOPMAIL_LOGIN_INPUT = "//input[@id='login']";
+    private static final String YOPMAIL_CHECK_BUTTON = "//div[@id='refreshbut']/button";
+    private static final String YOPMAIL_IFRAME = "//iframe[@id='ifmail']";
+    private static final String YOPMAIL_REFRESH_BUTTON = "//button[@id='refresh' and i[contains(@class, 'material-icons')]]";
+    private static final String YOPMAIL_REGISTRATION_LINK = "//p[contains(., 'acceso al sistema')]/following::b[contains(., 'http')][1]";
+    private static final String EXPECTED_REGISTRATION_URL_PREFIX = "autoonline-cae.audatex.com.mx/buyer/external/";
+    private static final String YOPMAIL_REGISTRATION_ANCHOR = "//a[contains(@href, 'autoonline-cae.audatex.com.mx')]";
+    private static final String YOPMAIL_EMPTY_INBOX_MESSAGE = "//div[@id='message' and contains(text(), 'bandeja de entrada está vacía')]";
+    // Frontend user table - Email extraction
+    private static final String CORREO_ELECTRONICO_COLUMN = "//table/tbody/tr[contains(@class, 'ant-table-row')]/td[count(ancestor::table/thead/tr/th[contains(., \"Correo Electrónico\")]/preceding-sibling::th) + 1]";
 
     public AdministratorMasterInter() {
         super();
@@ -61,6 +75,125 @@ public class AdministratorMasterInter extends BrowserPage {
         suffix.append(randomLetter());
         lastGeneratedEmail = EMAIL_PREFIX + suffix + EMAIL_DOMAIN;
         return lastGeneratedEmail;
+    }
+
+    private static String generateInvitationEmail() {
+        StringBuilder suffix = new StringBuilder(4);
+        suffix.append(randomDigit());
+        suffix.append(randomLetter());
+        suffix.append(randomDigit());
+        suffix.append(randomLetter());
+        String email = EMAIL_PREFIX + suffix + INVITATION_EMAIL_DOMAIN;
+        lastGeneratedEmail = email;
+        return email;
+    }
+
+    public boolean verifyInvitationEmailReceived(String emailAddress) {
+        String yopmailUser = emailAddress.split("@")[0];
+        log.info("Verifying email received in yopmail inbox: {}", yopmailUser);
+
+        // Navigate to yopmail
+        getDriver().get(YOPMAIL_URL);
+        waitForElementVisibility(getElement(By.xpath(YOPMAIL_LOGIN_INPUT)), Timeouts.LOAD_PAGE);
+
+        // Enter the yopmail user
+        sendKeys(getElement(By.xpath(YOPMAIL_LOGIN_INPUT)), yopmailUser);
+
+        // Click the check button to view inbox
+        click(getElement(By.xpath(YOPMAIL_CHECK_BUTTON)));
+
+        // Wait for the iframe to load initially
+        sleep(Timeouts.LOAD_HEAVY_RESULTS);
+
+        // Refresh loop: keep refreshing while the empty inbox message is still visible
+        int refreshAttempts = 0;
+        while (refreshAttempts < 20) {
+            click(getElement(By.xpath(YOPMAIL_REFRESH_BUTTON)));
+            sleep(Timeouts.SHORT_TIME);
+            try {
+                By emptyInboxLocator = By.xpath(YOPMAIL_EMPTY_INBOX_MESSAGE);
+                WebElement emptyMessage = getDriver().findElement(emptyInboxLocator);
+                if (emptyMessage.isDisplayed()) {
+                    refreshAttempts++;
+                    log.info("Empty inbox message still visible, refreshing again (attempt {})...", refreshAttempts);
+                    continue;
+                }
+            } catch (Exception ex) {
+                // Element not found or not visible - inbox is no longer empty
+                log.info("Empty inbox message no longer visible, proceeding...");
+                break;
+            }
+            break;
+        }
+
+        // Retry loop: refresh yopmail inbox up to 3 times if email hasn't arrived yet
+        int maxRetries = 3;
+        for (int attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                // Wait for the email iframe to be present
+                waitForElementPresence(By.xpath(YOPMAIL_IFRAME), Timeouts.LOAD_PAGE);
+
+                // Switch to the email content iframe
+                getDriver().switchTo().frame(getElement(By.xpath(YOPMAIL_IFRAME)));
+
+                String linkValue = null;
+
+                // First strategy: try to find an <a> element with href containing the expected URL
+                try {
+                    WebElement registrationAnchor = getElement(By.xpath(YOPMAIL_REGISTRATION_ANCHOR));
+                    linkValue = registrationAnchor.getAttribute("href");
+                    log.info("Registration anchor href found: {}", linkValue);
+                } catch (Exception ex) {
+                    log.info("Anchor element not found, trying plain text link...");
+                }
+
+                // Second strategy (fallback): if no anchor found, look for plain text link
+                if (linkValue == null || linkValue.isEmpty()) {
+                    try {
+                        WebElement registrationLink = getElement(By.xpath(YOPMAIL_REGISTRATION_LINK));
+                        linkValue = registrationLink.getText();
+                        log.info("Registration link text found: {}", linkValue);
+                    } catch (Exception ex) {
+                        log.info("Plain text link not found either");
+                    }
+                }
+
+                // Switch back to default content
+                getDriver().switchTo().defaultContent();
+
+                // If we found a link value, validate it
+                if (linkValue != null && !linkValue.isEmpty()) {
+                    log().image("Registration link found in yopmail", takeScreenshot());
+                    boolean isValidLink = linkValue.contains(EXPECTED_REGISTRATION_URL_PREFIX);
+                    log.info("Registration link validation result: {} (contains expected prefix: {})",
+                            isValidLink, EXPECTED_REGISTRATION_URL_PREFIX);
+                    return isValidLink;
+                }
+
+                // If we still haven't found it and there are retries left, refresh and try again
+                if (attempt < maxRetries) {
+                    log.info("Email not yet received, refreshing yopmail inbox (attempt {}/{})...",
+                            attempt + 1, maxRetries);
+                    getDriver().switchTo().defaultContent();
+                    click(getElement(By.xpath(YOPMAIL_CHECK_BUTTON)));
+                    sleep(Timeouts.SHORT_TIME);
+                }
+
+            } catch (Exception e) {
+                log.warn("Exception on attempt {} while checking yopmail: {}", attempt, e.getMessage());
+                getDriver().switchTo().defaultContent();
+                if (attempt < maxRetries) {
+                    log.info("Refreshing yopmail inbox and retrying...");
+                    click(getElement(By.xpath(YOPMAIL_REFRESH_BUTTON)));
+                    sleep(Timeouts.SHORT_TIME);
+                }
+            }
+        }
+
+        // If we exhausted all retries, the email was not found
+        log().image("Email with registration link not found in inbox after retries", takeScreenshot());
+        log.warn("Email not found after {} retries", maxRetries);
+        return false;
     }
 
     public static String generateDynamicName() {
@@ -897,7 +1030,7 @@ public class AdministratorMasterInter extends BrowserPage {
         storedValues = components.fillField(field.getInvitationFirstnameField(), "AutomationBuyer", storedValues, 0);
         storedValues = components.fillField(field.getInvitationSurnameField(), "Automation", storedValues, 0);
         storedValues = components.fillField(field.getInvitationLastnameField(), "QA", storedValues, 0);
-        storedValues = components.fillField(field.getInvitationEmailField(), generateDynamicEmail(), storedValues, 0);
+        storedValues = components.fillField(field.getInvitationEmailField(), generateInvitationEmail(), storedValues, 0);
         storedValues = components.fillField(field.getInvitationPhoneField(), "5512345678", storedValues, 0);
         log().image("Invitation form filled", takeScreenshot());
 
@@ -940,6 +1073,8 @@ public class AdministratorMasterInter extends BrowserPage {
         waitForElementVisibility(buttons.getSendButton());
         buttons.clickSendButton();
         log().image("Invitations sent", takeScreenshot());
+        // Extract the invitation email from the user table in the frontend
+        extractInvitationEmailFromTable();
 
         // Confirm file upload success modal
         waitForElementVisibility(field.getInvitationModalField());
@@ -959,6 +1094,33 @@ public class AdministratorMasterInter extends BrowserPage {
 
         new Buttons().jsClickAcceptButtonBuyer();
         log().image("Accept 4", takeScreenshot());
+        //despues de esto se hace la validacion de que el correo fue recibido en yopmail, pero no se hace en este metodo, se hace en el metodo inviteMassiveBuyers
+    }
+
+    /**
+     * Extracts the invitation email from the "Correo Electrónico" column
+     * in the frontend user table and stores it in extractedFrontendEmail.
+     */
+    public void extractInvitationEmailFromTable() {
+        log.info("Extracting invitation email from frontend user table");
+        try {
+            List<WebElement> emailCells = getElements(By.xpath(CORREO_ELECTRONICO_COLUMN));
+            assertions().assertThat(emailCells)
+                    .as("No se encontraron correos electrónicos en la tabla de usuarios")
+                    .isNotEmpty();
+            extractedFrontendEmail = getText(emailCells.get(0)).trim();
+            log.info("Extracted email from frontend table: {}", extractedFrontendEmail);
+        } catch (Exception e) {
+            log.warn("Could not extract email from frontend table: {}", e.getMessage());
+            extractedFrontendEmail = null;
+        }
+    }
+
+    /**
+     * Returns the last email extracted from the frontend user table.
+     */
+    public static String getExtractedFrontendEmail() {
+        return extractedFrontendEmail;
     }
 
     public boolean inviteMassiveBuyers(AolWebUser user) {
@@ -975,7 +1137,17 @@ public class AdministratorMasterInter extends BrowserPage {
         //waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.NOTIFICATION_DISPLAYED);
         log().image("Massive buyer invitation sent successfully", takeScreenshot());
 
-        return true;
+        // Verify the invitation email was received in yopmail inbox using the email extracted from the frontend table
+        String invitedEmail = getExtractedFrontendEmail();
+        if (invitedEmail != null && !invitedEmail.isEmpty()) {
+            log.info("Verifying invitation email was received for: {}", invitedEmail);
+            boolean emailReceived = verifyInvitationEmailReceived(invitedEmail);
+            log.info("Invitation email validation result: {}", emailReceived);
+            return emailReceived;
+        } else {
+            log.warn("No email was extracted from the frontend table, skipping yopmail verification");
+            return false;
+        }
     }
 
     public boolean inviteIndividualBuyer(AolWebUser user) {
@@ -992,6 +1164,12 @@ public class AdministratorMasterInter extends BrowserPage {
         waitForElementVisibility(getElement(By.xpath(NOTIFICATION_MESSAGE)), Timeouts.NOTIFICATION_DISPLAYED);
         log().image("Buyer invitation sent successfully", takeScreenshot());
 
-        return true;
+        // Verify the invitation email was received in yopmail inbox
+        String invitedEmail = getLastGeneratedEmail();
+        log.info("Verifying invitation email was received for: {}", invitedEmail);
+        boolean emailReceived = verifyInvitationEmailReceived(invitedEmail);
+
+        log.info("Invitation email validation result: {}", emailReceived);
+        return emailReceived;
     }
 }

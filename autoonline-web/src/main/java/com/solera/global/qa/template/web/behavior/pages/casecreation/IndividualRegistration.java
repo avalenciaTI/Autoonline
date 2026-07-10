@@ -1,6 +1,21 @@
 package com.solera.global.qa.template.web.behavior.pages.casecreation;
 
+import java.io.File;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
+
 import com.solera.global.qa.taf.web.tools.webdriver.BrowserPage;
+import com.solera.global.qa.template.web.behavior.data.AolWebPropertiesReader;
 import com.solera.global.qa.template.web.behavior.data.timeouts.Timeouts;
 import com.solera.global.qa.template.web.behavior.data.types.Case;
 import com.solera.global.qa.template.web.behavior.data.types.Sinister;
@@ -10,25 +25,13 @@ import com.solera.global.qa.template.web.behavior.pages.casecreation.transfercas
 import com.solera.global.qa.template.web.behavior.pages.componentpages.Buttons;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CaseType;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonComponents;
-import com.solera.global.qa.template.web.behavior.pages.componentpages.search.CaseSearch;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonLocationFields;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CommonSinisterField;
 import com.solera.global.qa.template.web.behavior.pages.componentpages.CompleteWebElement;
-import com.solera.global.qa.template.web.behavior.pages.loginpage.LogInPage;
+import com.solera.global.qa.template.web.behavior.pages.componentpages.search.CaseSearch;
 import com.solera.global.qa.template.web.behavior.pages.menupage.MenuPage;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.FluentWait;
 
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class IndividualRegistration extends BrowserPage {
@@ -38,6 +41,7 @@ public class IndividualRegistration extends BrowserPage {
 
     //DROPDOWN elements or similar
     public static final String CASE_TYPE_FIELD = "//div[contains(@id,'caseType')]";
+    public static final String MANAGEMENT_TYPE_FIELD = "//div[contains(@id,'caseToSell')]";
     public static final String CASE_WRECK_TYPE_FIELD = "//div[contains(@id,'wreckTypeId')]";
     public static final String CASE_WRECK_SUB_TYPE_FIELD = "//div[contains(@id,'wreckSubtypeId')]";
     public static final String CASE_ENGINE_TYPE_FIELD = "//div[contains(@id,'engineTypeId')]";
@@ -82,6 +86,15 @@ public class IndividualRegistration extends BrowserPage {
     public static final String CONTACT_NAME_FIELD = "//div[contains(@id,'contactName')] | //input[contains(@id,'contactName')]";
     public static final String CONTACT_PHONE_FIELD = "//div[contains(@id,'contactPhone')] | //input[contains(@id,'contactPhone')]";
 
+    public static final String PAPER_CLIP_BUTTON = "//input[contains(@accept,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')]";
+    public static final String ZIP_CLIP_BUTTON = "//input[@type='file' and contains(@accept,'zip')]";
+    private static final String SEND_MASSIVE_BUTTON = "//span[text()='Enviar']/parent::button[@type='submit']";
+    private static final String RESUME_VIEW_SECTION =
+            "//div[contains(@class, 'ant-modal-content')][.//div[contains(@class, 'ant-modal-body') and contains(., '0 registros tienen errores')]]";
+    private static final String RESUME_VIEW_SECTION_ZIP = "//p[contains(., \"exitosamente\") and not(contains(., \"0 registros\")) and not(contains(., \"0 zips\"))]";
+    public static final String CHECK_MASSIVE_ZIP_BUTTON  = "//button[@jest-id='UploadInputJest' and .//i[contains(@class, 'anticon-check')]]";
+    public static final String LOADING_MASSIVE_ZIP_BUTTON  = "//button[contains(@class, 'ant-btn-loading') and .//span[text()='Espere...']]";
+     public static final String ACCEPT_BUTTON_ZIP  = "//div[contains(@class, 'ant-modal-footer')]//button[normalize-space(.)='Aceptar']";
 
     @FindBy(xpath = CASE_TYPE_FIELD)
     WebElement caseType;
@@ -151,6 +164,8 @@ public class IndividualRegistration extends BrowserPage {
     WebElement calendarField;
     @FindBy(xpath = COMMENTS_FIELD) 
     WebElement commentsField;
+    @FindBy(xpath = ACCEPT_BUTTON_ZIP) 
+    WebElement acceptButtonZip;
 
 
 
@@ -188,6 +203,19 @@ public class IndividualRegistration extends BrowserPage {
 
     private static final String NOTIFICATION_MESSAGE = "//div[@class='ant-notification-notice-message']";
     public static final String INPUT = "input";
+    
+    // XPath to extract Siniestro/Número de Lote column from the resume view table
+    private static final String SINIESTRO_NIU_COLUMN_XPATH = 
+        "//table/tbody/tr[contains(@class, 'ant-table-row')]/td[count(ancestor::table/thead/tr/th[contains(., \"Siniestro/Número de Lote\")]/preceding-sibling::th) + 1]";
+
+    private static final String VISUAL_SERIE_COLUMN_XPATH = 
+        "//table/tbody/tr[contains(@class, 'ant-table-row')]/td[count(ancestor::table/thead/tr/th[contains(., \"Serie visual\")]/preceding-sibling::th) + 1]";
+    
+    // Static list to store extracted Siniestro/NIU values after massive registration
+    private static List<String> extractedSiniestroValues = new ArrayList<>();
+
+     // Static list to store extracted Visual Serie values after massive registration
+    private static List<String> extractedVisualSerieValues = new ArrayList<>();
 
     ///
 
@@ -627,4 +655,337 @@ public List<CompleteWebElement> fillVehicleSectionAssign() {
     }
 
 
+
+
+
+     public boolean miscellaneousMassRecord() {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCases();
+        casesMenu.clickMassiveRegistrationCase();
+        log.info("In massive registration:");
+        WebElement caseTypeSel = getElement(By.xpath(CASE_TYPE_FIELD));
+        log.info("Case type selector found");
+        new CommonComponents().selectFromDropdownText(caseTypeSel,"Diversos");
+        log.info("After select dropdown");
+        String xlsxFolderName = "miscellaneousMassiveRecord";
+        String zipFolderName = "miscellaneousMassiveRecordZIP";
+        uploadMassiveFiles(xlsxFolderName);
+        submitMassiveRegistration();
+        attachImagesWithZip(zipFolderName);
+        submitMassiveZipRegistration();
+
+        log.info("Cases created via massive registration, now extracting Siniestro/NIU values from resume view");
+        
+
+        log.info("Extracted Siniestro/NIU values: {}", extractedSiniestroValues);
+
+        log.info("Cases created via massive registration, now searching for created case");
+        sleep(5000);
+        //menuPage.clickCases();
+       // casesMenu.consultCases();
+        log().image("Navigated to Cases consultation", takeScreenshot());
+
+        boolean caseFound = false;
+        if (!extractedSiniestroValues.isEmpty()) {
+            String firstSiniestro = extractedSiniestroValues.get(0);
+            log.info("Running general search with first Siniestro/NIU: {}", firstSiniestro);
+            caseFound = new CaseSearch().generalSearch(CaseType.VARIOUS, firstSiniestro);
+        } else {
+            log.warn("No Siniestro/NIU values extracted, using fallback search");
+            caseFound = new CaseSearch().generalSearch(CaseType.VARIOUS, "TESTTRANSFERAUTOMATEDQA26");
+        }
+
+        if (caseFound) {
+            log.info("Case found successfully after massive registration");
+        } else {
+            log.warn("Case not found after massive registration");
+        }
+
+        log().image("Case search after massive registration", takeScreenshot());
+        return caseFound;
+    }
+
+
+
+
+ public boolean massiveVehicleRegistrationPublication() {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCases();
+        casesMenu.clickMassiveRegistrationCase();
+        log.info("Filled vehicle case type generation");
+        WebElement caseTypeSel = getElement(By.xpath(CASE_TYPE_FIELD));
+        log.info("Case type selector found");
+        new CommonComponents().selectFromDropdownText(caseTypeSel,"Vehículos");
+
+        WebElement managementTypeSel = getElement(By.xpath(MANAGEMENT_TYPE_FIELD));
+        log.info("Management type selector found");
+        new CommonComponents().selectFromDropdownText(managementTypeSel,"Publicación");
+        log.info("After select dropdown");
+
+        String xlsxFolderName = "massiveVehicleRegistrationPublication";
+        String zipFolderName = "massiveVehicleRegistrationPublicationZIP";
+        uploadMassiveFiles(xlsxFolderName);
+        submitmassiveVehicleRegistration();
+        attachImagesWithZip(zipFolderName);
+        submitMassiveZipRegistration();
+
+        log.info("Cases created via massive registration, now extracting Siniestro/NIU values from resume view");
+        log.info("Extracted Visual Serie values: {}", extractedVisualSerieValues);
+        log.info("Cases created via massive registration, now searching for created case");
+        sleep(5000);
+        //menuPage.clickCases();
+       // casesMenu.consultCases();
+        log().image("Navigated to Cases consultation", takeScreenshot());
+
+        boolean caseFound = false;
+        if (!extractedVisualSerieValues.isEmpty()) {
+            String firstVisualSerie = extractedVisualSerieValues.get(0);
+            log.info("Running general search with first Visual Serie: {}", firstVisualSerie);
+            caseFound = new CaseSearch().generalSearch(CaseType.VEHICLES, firstVisualSerie);
+        } else {
+            log.warn("No Siniestro/NIU values extracted, using fallback search");
+            caseFound = new CaseSearch().generalSearch(CaseType.VEHICLES, "N1SCIVICQA3");
+        }
+
+        if (caseFound) {
+            log.info("Case found successfully after massive registration");
+        } else {
+            log.warn("Case not found after massive registration");
+        }
+
+        log().image("Case search after massive registration", takeScreenshot());
+        return caseFound;
+    }
+
+
+
+
+
+
+ public boolean massiveVehicleRegistrationManagement() {
+        MenuPage menuPage = new MenuPage();
+        RegistrationMenu casesMenu = menuPage.clickCases();
+        casesMenu.clickMassiveRegistrationCase();
+        log.info("Filled vehicle case type generation");
+        WebElement caseTypeSel = getElement(By.xpath(CASE_TYPE_FIELD));
+        log.info("Case type selector found");
+        new CommonComponents().selectFromDropdownText(caseTypeSel,"Vehículos");
+
+        WebElement managementTypeSel = getElement(By.xpath(MANAGEMENT_TYPE_FIELD));
+        log.info("Management type selector found");
+        new CommonComponents().selectFromDropdownText(managementTypeSel,"Gestión");
+        log.info("After select dropdown");
+
+        String xlsxFolderName = "massiveVehicleRegistrationManagement";
+        String zipFolderName = "massiveVehicleRegistrationManagementZIP";
+        uploadMassiveFiles(xlsxFolderName);
+        submitmassiveVehicleRegistration();
+        attachImagesWithZip(zipFolderName);
+        submitMassiveZipRegistration();
+
+        log.info("Cases created via massive registration, now extracting Siniestro/NIU values from resume view");
+        log.info("Extracted Visual Serie values: {}", extractedVisualSerieValues);
+        log.info("Cases created via massive registration, now searching for created case");
+        sleep(5000);
+        //menuPage.clickCases();
+       // casesMenu.consultCases();
+        log().image("Navigated to Cases consultation", takeScreenshot());
+
+        boolean caseFound = false;
+        if (!extractedVisualSerieValues.isEmpty()) {
+            String firstVisualSerie = extractedVisualSerieValues.get(0);
+            log.info("Running general search with first Visual Serie: {}", firstVisualSerie);
+            caseFound = new CaseSearch().generalSearch(CaseType.VEHICLES, firstVisualSerie);
+        } else {
+            log.warn("No Siniestro/NIU values extracted, using fallback search");
+            caseFound = new CaseSearch().generalSearch(CaseType.VEHICLES, "N1SCIVICQA3");
+        }
+
+        if (caseFound) {
+            log.info("Case found successfully after massive registration");
+        } else {
+            log.warn("Case not found after massive registration");
+        }
+
+        log().image("Case search after massive registration", takeScreenshot());
+        return caseFound;
+    }
+
+
+
+
+
+
+    /**
+     * Extracts Siniestro/Número de Lote values from the resume view table
+     * and stores them in the static list extractedSiniestroValues.
+     */
+    private void extractSiniestroValuesFromResumeView() {
+        extractedSiniestroValues = new ArrayList<>();
+        try {
+            List<WebElement> siniestroCells = getElements(By.xpath(SINIESTRO_NIU_COLUMN_XPATH));
+            log.info("Found {} Siniestro/NIU cells in resume view", siniestroCells.size());
+            for (WebElement cell : siniestroCells) {
+                String value = getText(cell).trim();
+                if (!value.isEmpty()) {
+                    extractedSiniestroValues.add(value);
+                    log.info("Extracted Siniestro/NIU: '{}'", value);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Could not extract Siniestro/NIU values from resume view: {}", e.getMessage());
+        }
+    }
+
+
+
+
+      /**
+     * Extracts Visual Serie values from the resume view table
+     * and stores them in the static list extractedVisualSerieValues.
+     */
+    private void extractVisualSerieValuesFromResumeView() {
+        extractedVisualSerieValues = new ArrayList<>();
+        try {
+            List<WebElement> visualSerieCells = getElements(By.xpath(VISUAL_SERIE_COLUMN_XPATH));
+            log.info("Found {} Visual Serie cells in resume view", visualSerieCells.size());
+            for (WebElement cell : visualSerieCells) {
+                String value = getText(cell).trim();
+                if (!value.isEmpty()) {
+                    extractedVisualSerieValues.add(value);
+                    log.info("Extracted Visual Serie: '{}'", value);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Could not extract Visual Serie values from resume view: {}", e.getMessage());
+        }
+    }
+
+
+
+
+
+    private void uploadMassiveFiles(String xlsxFolderName) {
+        log.info("Uploading bulk files");
+        String xlsxFolder = xlsxFolderName + "/";
+        String attachmentsFolder = AolWebPropertiesReader.getAttachmentsFolder(xlsxFolder);
+        log.info("XLSX ATTACHMENTS FOLDER: {}", attachmentsFolder);
+
+        File folder = new File(attachmentsFolder);
+        File[] files = folder.listFiles();
+        int numFiles = files.length;
+        log.info("ATTACH FILES FROM FOLDER, files in folder: {}", numFiles);
+        StringBuilder files2Send = new StringBuilder();
+        String basePath = folder.getAbsolutePath() + File.separator;
+
+        for (int i = 0; i < numFiles; i++) {
+            String filePath = basePath + files[i].getName();
+            log.info("FILE PATH: {}", filePath);
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                log.info("FILE EXISTS: {}", filePath);
+            }
+            files2Send.append(filePath);
+            if (i < numFiles - 1) {
+                files2Send.append("\n");
+            }
+        }
+
+        log.info("TotalFiles: {}", files2Send.toString());
+        log.info("Sending files to hidden file input");
+        waitForElementPresence(By.xpath(PAPER_CLIP_BUTTON), Timeouts.LOAD_ELEMENT);
+        sleep(500);
+        getElement(By.xpath(PAPER_CLIP_BUTTON)).sendKeys(files2Send.toString());
+        log.info("File uploaded");
+    }
+
+
+
+     private void submitMassiveRegistration() {
+        log.info("Submitting bulk registration");
+        waitForElementToBeClickable(getElement(By.xpath(SEND_MASSIVE_BUTTON)), Timeouts.LOAD_RESULTS);
+        log().image("Before clicking Enviar button", takeScreenshot());
+        jsClick(getElement(By.xpath(SEND_MASSIVE_BUTTON)));
+        log().image("Enviar button clicked", takeScreenshot());
+
+        waitForElementPresence(getElement(By.xpath(RESUME_VIEW_SECTION)), Timeouts.LOAD_ELEMENT);
+        log().image("Resume view displayed", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        extractSiniestroValuesFromResumeView();
+        new Buttons().clickContinueBtn();
+    }
+
+ private void attachImagesWithZip(String zipFolderName) {
+     log.info("Uploading bulk files");
+        String zipFolder = zipFolderName + "/";
+        String attachmentsFolder = AolWebPropertiesReader.getAttachmentsFolder(zipFolder);
+        log.info("ZIP ATTACHMENTS FOLDER: {}", attachmentsFolder);
+
+        File folder = new File(attachmentsFolder);
+        File[] files = folder.listFiles();
+        int numFiles = files.length;
+        log.info("ATTACH FILES FROM FOLDER, files in folder: {}", numFiles);
+        StringBuilder files2Send = new StringBuilder();
+        String basePath = folder.getAbsolutePath() + File.separator;
+
+        for (int i = 0; i < numFiles; i++) {
+            String filePath = basePath + files[i].getName();
+            log.info("FILE PATH: {}", filePath);
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                log.info("FILE EXISTS: {}", filePath);
+            }
+            files2Send.append(filePath);
+            if (i < numFiles - 1) {
+                files2Send.append("\n");
+            }
+        }
+
+        log.info("TotalFiles: {}", files2Send.toString());
+        log.info("Sending files to hidden file input");
+        waitForElementPresence(By.xpath(ZIP_CLIP_BUTTON), Timeouts.LOAD_ELEMENT);
+        sleep(500);
+        getElement(By.xpath(ZIP_CLIP_BUTTON)).sendKeys(files2Send.toString());
+        log.info("File uploaded");
+       
+    }
+
+     private void submitMassiveZipRegistration() {
+        log.info("Submitting bulk registration");
+        sleep(1000);
+        waitForElementPresence(getElement(By.xpath(CHECK_MASSIVE_ZIP_BUTTON)), Timeouts.LOAD_RESULTS);
+        sleep(1000);
+        new Buttons().jsClickAcceptButton();
+        log().image("Check button clicked", takeScreenshot());
+        waitForElementPresence(getElement(By.xpath(LOADING_MASSIVE_ZIP_BUTTON)), Timeouts.LOAD_RESULTS);
+        waitForElementPresence(By.xpath(RESUME_VIEW_SECTION_ZIP), 60000);
+        log().image("Resume view displayed", takeScreenshot());
+        sleep(500);
+        waitForElementPresence(By.xpath(RESUME_VIEW_SECTION_ZIP), 60000);
+        waitForElementToBeClickable(getElement(By.xpath(ACCEPT_BUTTON_ZIP)), Timeouts.LOAD_RESULTS);
+        jsClick(acceptButtonZip);
+    }
+
+
+
+     private void submitmassiveVehicleRegistration() {
+        log.info("Submitting bulk registration");
+        waitForElementToBeClickable(getElement(By.xpath(SEND_MASSIVE_BUTTON)), Timeouts.LOAD_RESULTS);
+        log().image("Before clicking Enviar button", takeScreenshot());
+        jsClick(getElement(By.xpath(SEND_MASSIVE_BUTTON)));
+        log().image("Enviar button clicked", takeScreenshot());
+
+        waitForElementPresence(getElement(By.xpath(RESUME_VIEW_SECTION)), Timeouts.LOAD_ELEMENT);
+        log().image("Resume view displayed", takeScreenshot());
+        new Buttons().jsClickAcceptButton();
+        extractVisualSerieValuesFromResumeView();
+        new Buttons().clickContinueBtn();
+    }
+
+
+
+
 }
+ 

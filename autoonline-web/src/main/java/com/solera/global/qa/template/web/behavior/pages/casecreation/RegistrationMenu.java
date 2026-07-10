@@ -81,7 +81,9 @@ public class RegistrationMenu extends BrowserPage {
     }
 
     public void clickMassiveRegistrationCase() {
-        click(massiveRegistrationCase);
+        massiveRegistrationCase = getElement(By.xpath(CASE_MASSIVE_REGISTRATION));
+        jsClick(massiveRegistrationCase);
+        log().image("Massive Registration Case clicked", takeScreenshot());
     }
 
     public void clickIndividualRegistrationCase() {
